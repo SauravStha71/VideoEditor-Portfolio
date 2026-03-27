@@ -70,7 +70,7 @@ export default function About() {
               <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
               {/* Name label at bottom */}
               <div className="absolute bottom-6 left-6">
-                <p className="font-serif text-2xl italic text-warm-white">Alex Mercer</p>
+                <p className="font-serif text-2xl italic text-warm-white">Dipen Maharjan</p>
                 <p className="font-mono text-xs text-muted tracking-widest uppercase mt-1">
                   Video Editor
                 </p>
@@ -124,7 +124,7 @@ export default function About() {
               className="space-y-5 mb-12"
             >
               <p className="text-muted-light leading-relaxed text-base font-light">
-                I'm a New York-based video editor with over 8 years of experience crafting
+                I'm a Ontario based video editor with over 8 years of experience crafting
                 cinematic narratives. From documentary to high-fashion campaigns, I believe
                 every frame has a story to tell.
               </p>

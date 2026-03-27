@@ -33,12 +33,9 @@ export default function Hero() {
         className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-accent/40 to-transparent origin-left"
       />
 
-      {/* Main content
-          pb-36/pb-40 reserves room at the bottom so the scroll indicator
-          never sits on top of the subtitle row on short viewports           */}
       <motion.div
         style={{ y, opacity }}
-        className="section-padding relative z-10 pt-28 sm:pt-32 pb-36 sm:pb-40"
+        className="section-padding relative z-10 pt-28 sm:pt-32 pb-32 sm:pb-40"
       >
         {/* Eyebrow */}
         <motion.div
@@ -79,22 +76,18 @@ export default function Hero() {
           </motion.h1>
         </div>
 
-        {/* Subtitle row
-            · stacks vertically on mobile, side-by-side from sm upward
-            · right padding prevents "View Work" from touching the corner label */}
+        {/* Subtitle row */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.9 }}
-          className="flex flex-col sm:flex-row sm:items-center sm:justify-between
-                     gap-5 sm:gap-8 mt-2
-                     pr-0 sm:pr-20 md:pr-24 lg:pr-16 xl:pr-12"
+          className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-5 sm:gap-8 mt-2"
         >
           <p className="font-mono text-xs sm:text-sm tracking-widest uppercase text-muted max-w-xs">
             Video Editor &amp; Visual Storyteller
           </p>
 
-          <div className="flex items-center gap-6">
+          <div className="flex items-center gap-6 sm:pr-20 md:pr-24 lg:pr-16 xl:pr-12">
             <a href="#work" className="btn-outline group" data-cursor="expand">
               <span>View Work</span>
               <svg
@@ -113,15 +106,39 @@ export default function Hero() {
             </a>
           </div>
         </motion.div>
+
+        {/* Location — visible inline ONLY on mobile (below subtitle row) */}
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 1.1 }}
+          className="flex items-center gap-3 mt-6 sm:hidden"
+        >
+          <svg
+            className="w-3 h-3 text-muted flex-shrink-0"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={1.5}
+              d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5z"
+            />
+          </svg>
+          <span className="font-mono text-xs tracking-widest uppercase text-muted">
+            Based in Ontario, Canada
+          </span>
+        </motion.div>
       </motion.div>
 
-      {/* Scroll indicator — always centered horizontally, clear of all other elements */}
+      {/* Scroll indicator */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 1, delay: 1.4 }}
-        className="absolute bottom-8 sm:bottom-10 left-1/2 -translate-x-1/2
-                   flex flex-col items-center gap-3 z-10"
+        className="absolute bottom-8 sm:bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-3 z-10"
       >
         <span className="font-mono text-xs tracking-widest uppercase text-muted">Scroll</span>
         <motion.div
@@ -131,9 +148,7 @@ export default function Hero() {
         />
       </motion.div>
 
-      {/* Corner label
-          · hidden on mobile (would overlap scroll indicator or subtitle row)
-          · visible from sm up, pushed further right on wider screens          */}
+      {/* Corner label — vertical, RIGHT side, desktop only (sm and up) */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
