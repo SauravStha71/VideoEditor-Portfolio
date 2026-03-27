@@ -62,7 +62,7 @@ export default function About() {
             <div className="relative aspect-[3/4] overflow-hidden bg-surface">
               <img
                 src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=800&q=80"
-                alt="Alex Mercer — Video Editor"
+                alt="Dipen Maharjan — Video Editor"
                 loading="lazy"
                 className="w-full h-full object-cover grayscale contrast-110"
               />
