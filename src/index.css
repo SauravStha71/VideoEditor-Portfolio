@@ -11,15 +11,61 @@ html {
   scroll-behavior: smooth;
 }
 
+/* ── Theme Variables ── */
+:root {
+  --bg:           #0a0a0a;
+  --bg-surface:   #111111;
+  --bg-card:      #161616;
+  --text:         #e8e8e2;
+  --text-muted:   #666666;
+  --text-muted-light: #999999;
+  --border:       rgba(245,245,240,0.08);
+  --cursor-color: #f5f5f0;
+  --cursor-border: rgba(245,245,240,0.5);
+  --cursor-expanded-bg: rgba(245,245,240,0.04);
+  --grid-line:    rgba(245,245,240,0.03);
+  --outline-stroke: #e8e8e2;
+  --scrollbar-track: #0a0a0a;
+  --scrollbar-thumb: #333;
+  --card-overlay-end: rgba(10,10,10,0.9);
+  --vignette: radial-gradient(ellipse at center, transparent 30%, #0a0a0a 100%);
+  --contact-glow: rgba(201,169,110,0.04);
+  --navbar-bg: rgba(10,10,10,0.8);
+  --transition: background-color 0.4s ease, color 0.4s ease, border-color 0.4s ease;
+}
+
+html.light {
+  --bg:           #f5f5f0;
+  --bg-surface:   #eeede8;
+  --bg-card:      #e8e7e2;
+  --text:         #1a1a1a;
+  --text-muted:   #888888;
+  --text-muted-light: #555555;
+  --border:       rgba(10,10,10,0.08);
+  --cursor-color: #1a1a1a;
+  --cursor-border: rgba(10,10,10,0.4);
+  --cursor-expanded-bg: rgba(10,10,10,0.04);
+  --grid-line:    rgba(10,10,10,0.04);
+  --outline-stroke: #1a1a1a;
+  --scrollbar-track: #f5f5f0;
+  --scrollbar-thumb: #bbb;
+  --card-overlay-end: rgba(245,245,240,0.0);
+  --vignette: radial-gradient(ellipse at center, transparent 30%, #f5f5f0 100%);
+  --contact-glow: rgba(201,169,110,0.06);
+  --navbar-bg: rgba(245,245,240,0.85);
+  --transition: background-color 0.4s ease, color 0.4s ease, border-color 0.4s ease;
+}
+
 body {
   margin: 0;
-  background-color: #0a0a0a;
-  color: #e8e8e2;
+  background-color: var(--bg);
+  color: var(--text);
   font-family: 'Inter', system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   overflow-x: hidden;
   cursor: none;
+  transition: var(--transition);
 }
 
 /* ── Hide default cursor everywhere ── */
@@ -28,23 +74,16 @@ body {
 }
 
 /* ── Scrollbar ── */
-::-webkit-scrollbar {
-  width: 4px;
-}
-::-webkit-scrollbar-track {
-  background: #0a0a0a;
-}
-::-webkit-scrollbar-thumb {
-  background: #333;
-  border-radius: 2px;
-}
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: var(--scrollbar-track); }
+::-webkit-scrollbar-thumb { background: var(--scrollbar-thumb); border-radius: 2px; }
 
 /* ── Custom Cursor ── */
 .cursor-dot {
   position: fixed;
   width: 6px;
   height: 6px;
-  background: #f5f5f0;
+  background: var(--cursor-color);
   border-radius: 50%;
   pointer-events: none;
   z-index: 99999;
@@ -56,7 +95,7 @@ body {
   position: fixed;
   width: 36px;
   height: 36px;
-  border: 1px solid rgba(245, 245, 240, 0.5);
+  border: 1px solid var(--cursor-border);
   border-radius: 50%;
   pointer-events: none;
   z-index: 99998;
@@ -72,21 +111,21 @@ body {
 .cursor-ring.expanded {
   width: 64px;
   height: 64px;
-  border-color: rgba(245, 245, 240, 0.8);
-  background: rgba(245, 245, 240, 0.04);
+  border-color: var(--cursor-color);
+  background: var(--cursor-expanded-bg);
 }
 
 /* ── Grid Texture ── */
 .grid-texture {
   background-image:
-    linear-gradient(rgba(245,245,240,0.03) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(245,245,240,0.03) 1px, transparent 1px);
+    linear-gradient(var(--grid-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
   background-size: 60px 60px;
 }
 
 /* ── Outlined Heading ── */
 .text-outline {
-  -webkit-text-stroke: 1px #e8e8e2;
+  -webkit-text-stroke: 1px var(--outline-stroke);
   color: transparent;
 }
 
@@ -116,7 +155,7 @@ body {
   background: linear-gradient(
     to bottom,
     transparent 40%,
-    rgba(10, 10, 10, 0.9) 100%
+    var(--card-overlay-end) 100%
   );
 }
 
@@ -125,7 +164,8 @@ body {
   font-family: 'DM Mono', monospace;
   font-size: 10px;
   letter-spacing: 0.15em;
-  color: rgba(245,245,240,0.4);
+  color: var(--text-muted);
+  opacity: 0.6;
 }
 
 /* ── Divider line ── */
@@ -138,23 +178,25 @@ body {
 
 /* ── Button styles ── */
 .btn-outline {
-  @apply inline-flex items-center gap-3 border border-warm-white/30 text-warm-white/80 
-         font-mono text-xs tracking-widest uppercase px-8 py-4
-         transition-all duration-500;
+  @apply inline-flex items-center gap-3 font-mono text-xs tracking-widest uppercase px-8 py-4 transition-all duration-500;
+  border: 1px solid var(--border);
+  color: var(--text);
+  opacity: 0.8;
 }
-
 .btn-outline:hover {
-  @apply border-warm-white text-warm-white bg-warm-white/5;
+  opacity: 1;
+  background: rgba(128,128,128,0.08);
+  border-color: var(--text);
 }
 
 .btn-primary {
-  @apply inline-flex items-center gap-3 bg-warm-white text-black 
-         font-mono text-xs tracking-widest uppercase px-8 py-4
-         transition-all duration-500;
+  @apply inline-flex items-center gap-3 font-mono text-xs tracking-widest uppercase px-8 py-4 transition-all duration-500;
+  background: var(--text);
+  color: var(--bg);
 }
-
 .btn-primary:hover {
-  @apply bg-off-white scale-[0.98];
+  opacity: 0.88;
+  transform: scale(0.98);
 }
 
 /* ── Video card ── */
@@ -162,4 +204,21 @@ body {
   object-fit: cover;
   width: 100%;
   height: 100%;
+}
+
+/* ── Theme toggle button ── */
+.theme-toggle {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text);
+  transition: border-color 0.3s, background 0.3s;
+}
+.theme-toggle:hover {
+  background: rgba(128,128,128,0.1);
+  border-color: var(--text);
 }

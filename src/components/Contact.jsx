@@ -2,8 +2,7 @@ import { motion } from 'framer-motion';
 
 const socialLinks = [
   {
-    label: 'Instagram',
-    href: 'https://instagram.com',
+    label: 'Instagram', href: 'https://instagram.com',
     icon: (
       <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <rect x="2" y="2" width="20" height="20" rx="5" ry="5" strokeWidth="1.5" />
@@ -13,8 +12,7 @@ const socialLinks = [
     ),
   },
   {
-    label: 'LinkedIn',
-    href: 'https://linkedin.com',
+    label: 'LinkedIn', href: 'https://linkedin.com',
     icon: (
       <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"
@@ -24,8 +22,7 @@ const socialLinks = [
     ),
   },
   {
-    label: 'YouTube',
-    href: 'https://youtube.com',
+    label: 'YouTube', href: 'https://youtube.com',
     icon: (
       <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"
@@ -38,23 +35,15 @@ const socialLinks = [
 
 export default function Contact() {
   return (
-    <section
-      id="contact"
-      className="py-28 md:py-44 relative overflow-hidden"
-    >
-      {/* Top line */}
-      <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-warm-white/10 to-transparent" />
+    <section id="contact" className="py-28 md:py-44 relative overflow-hidden"
+      style={{ backgroundColor: 'var(--bg)' }}>
+      <div className="absolute top-0 left-0 right-0 h-px"
+        style={{ background: 'linear-gradient(to right, transparent, var(--border), transparent)' }} />
 
-      {/* Background accent */}
-      <div
-        className="absolute inset-0 pointer-events-none"
-        style={{
-          background: 'radial-gradient(ellipse at 50% 100%, rgba(201,169,110,0.04) 0%, transparent 70%)',
-        }}
-      />
+      <div className="absolute inset-0 pointer-events-none"
+        style={{ background: `radial-gradient(ellipse at 50% 100%, var(--contact-glow) 0%, transparent 70%)` }} />
 
       <div className="section-padding flex flex-col items-center text-center relative z-10">
-        {/* Label */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -67,31 +56,29 @@ export default function Contact() {
           <span className="divider" />
         </motion.div>
 
-        {/* Main heading */}
         <motion.h2
           initial={{ opacity: 0, y: 40 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
           className="font-serif font-light leading-none mb-8 max-w-4xl"
-          style={{ fontSize: 'clamp(3.5rem, 10vw, 10rem)' }}
+          style={{ fontSize: 'clamp(3.5rem, 10vw, 10rem)', color: 'var(--text)' }}
         >
-          <span className="text-warm-white italic block">Let's Work</span>
+          <span className="italic block">Let's Work</span>
           <span className="text-outline italic block">Together.</span>
         </motion.h2>
 
-        {/* Subtext */}
         <motion.p
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8, delay: 0.15 }}
-          className="font-mono text-sm text-muted tracking-wider max-w-md leading-relaxed mb-14"
+          className="font-mono text-sm tracking-wider max-w-md leading-relaxed mb-14"
+          style={{ color: 'var(--text-muted)' }}
         >
           Open for freelance projects, brand collaborations, and long-term creative partnerships. Let's make something memorable.
         </motion.p>
 
-        {/* CTA Button */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -99,32 +86,25 @@ export default function Contact() {
           transition={{ duration: 0.8, delay: 0.25 }}
           className="mb-16"
         >
-          <a
-            href="mailto:hello@alexmercer.com"
-            className="btn-primary group"
-            data-cursor="expand"
-          >
-            <svg
-              className="w-4 h-4 group-hover:-translate-y-0.5 transition-transform duration-300"
-              fill="none" stroke="currentColor" viewBox="0 0 24 24"
-            >
+          <a href="mailto:hello@dipenmaharjan.com" className="btn-primary group" data-cursor="expand">
+            <svg className="w-4 h-4 group-hover:-translate-y-0.5 transition-transform duration-300"
+              fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5}
                 d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
             </svg>
-            <span>hello@alexmercer.com</span>
+            <span>hello@dipenmaharjan.com</span>
           </a>
         </motion.div>
 
-        {/* Divider */}
         <motion.div
-          initial={{ scaleX: 0 }}
-          whileInView={{ scaleX: 1 }}
+          initial={{ scaleY: 0 }}
+          whileInView={{ scaleY: 1 }}
           viewport={{ once: true }}
           transition={{ duration: 1, delay: 0.3 }}
-          className="w-px h-12 bg-gradient-to-b from-warm-white/20 to-transparent mb-12"
+          className="w-px h-12 mb-12"
+          style={{ background: 'linear-gradient(to bottom, var(--border), transparent)' }}
         />
 
-        {/* Social Links */}
         <motion.div
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
@@ -143,15 +123,14 @@ export default function Contact() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: i * 0.1 + 0.5 }}
-              className="flex flex-col items-center gap-2 text-muted hover:text-warm-white transition-colors duration-300 group"
+              className="flex flex-col items-center gap-2 transition-colors duration-300 group hover:text-accent"
+              style={{ color: 'var(--text-muted)' }}
               data-cursor="expand"
             >
               <span className="group-hover:-translate-y-0.5 transition-transform duration-300">
                 {social.icon}
               </span>
-              <span className="font-mono text-xs tracking-widest uppercase">
-                {social.label}
-              </span>
+              <span className="font-mono text-xs tracking-widest uppercase">{social.label}</span>
             </motion.a>
           ))}
         </motion.div>

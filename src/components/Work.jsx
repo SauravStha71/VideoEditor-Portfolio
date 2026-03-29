@@ -4,8 +4,8 @@ import { projects } from '../data/projects';
 
 export default function Work() {
   return (
-    <section id="work" className="py-28 md:py-40 section-padding">
-      {/* Section Header */}
+    <section id="work" className="py-28 md:py-40 section-padding"
+      style={{ backgroundColor: 'var(--bg)' }}>
       <motion.div
         initial={{ opacity: 0, y: 30 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -14,29 +14,22 @@ export default function Work() {
         className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-16 md:mb-24"
       >
         <div>
-          <p className="font-mono text-xs tracking-ultra uppercase text-accent mb-4">
-            — Selected Work
-          </p>
-          <h2 className="font-serif font-light italic leading-none"
-            style={{ fontSize: 'clamp(3rem, 8vw, 8rem)' }}
-          >
-            <span className="text-warm-white">Projects</span>
+          <p className="font-mono text-xs tracking-ultra uppercase text-accent mb-4">— Selected Work</p>
+          <h2 className="font-serif font-light italic leading-none" style={{ fontSize: 'clamp(3rem, 8vw, 8rem)', color: 'var(--text)' }}>
+            Projects
           </h2>
         </div>
-
-        <p className="font-mono text-xs text-muted tracking-wider max-w-xs leading-relaxed">
+        <p className="font-mono text-xs tracking-wider max-w-xs leading-relaxed" style={{ color: 'var(--text-muted)' }}>
           A curated selection of films, commercials, and creative projects — each crafted with intention and precision.
         </p>
       </motion.div>
 
-      {/* Asymmetric grid */}
       <div className="grid grid-cols-12 gap-3 md:gap-4">
         {projects.map((project, i) => (
           <ProjectCard key={project.id} project={project} index={i} />
         ))}
       </div>
 
-      {/* View all link */}
       <motion.div
         initial={{ opacity: 0 }}
         whileInView={{ opacity: 1 }}

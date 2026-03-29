@@ -8,7 +8,7 @@ import Footer from './components/Footer';
 
 export default function App() {
   return (
-    <div className="bg-black min-h-screen">
+    <div style={{ backgroundColor: 'var(--bg)', color: 'var(--text)' }} className="min-h-screen transition-colors duration-400">
       <CustomCursor />
       <Navbar />
       <main>

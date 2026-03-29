@@ -1,12 +1,14 @@
 // Project data — thumbnails use Unsplash static images for reliable display
 // In production, replace videoSrc with actual video files
+import giphyGif from '../assets/giphy.gif';
+
 export const projects = [
   {
     id: '01',
     title: 'Neon Requiem',
     category: 'Short Film',
     tags: ['Narrative', 'Color Grade'],
-    thumb: 'https://images.unsplash.com/photo-1536240478700-b869ad10e2ab?w=1200&q=80',
+    thumb: giphyGif,  // 🎬 Replace with your real thumbnail later
     videoSrc: null,
     size: 'large', // col-span-7
   },
