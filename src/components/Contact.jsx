@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 const socialLinks = [
   {
     label: 'Instagram',
-    href: 'https://instagram.com',
+    href: 'https://www.instagram.com/mhr.dp/',
     icon: (
       <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <rect x="2" y="2" width="20" height="20" rx="5" ry="5" strokeWidth="1.5" />
@@ -14,7 +14,7 @@ const socialLinks = [
   },
   {
     label: 'LinkedIn',
-    href: 'https://linkedin.com',
+    href: 'https://www.linkedin.com/in/dipen-maharjan-b4a124330/',
     icon: (
       <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"
@@ -25,7 +25,7 @@ const socialLinks = [
   },
   {
     label: 'YouTube',
-    href: 'https://youtube.com',
+    href: 'https://www.youtube.com/@dipenmaharjan6461',
     icon: (
       <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"

@@ -84,7 +84,7 @@ export default function Hero() {
           className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-5 sm:gap-8 mt-2"
         >
           <p className="font-mono text-xs sm:text-sm tracking-widest uppercase text-muted max-w-xs">
-            Video Editor &amp; Visual Storyteller
+            Video Editor, Motion Designer &amp; Visual Storyteller
           </p>
 
           <div className="flex items-center gap-6 sm:pr-20 md:pr-24 lg:pr-16 xl:pr-12">
