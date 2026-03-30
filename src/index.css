@@ -2,94 +2,186 @@
 @tailwind components;
 @tailwind utilities;
 
-/* ── Base Reset ── */
-*, *::before, *::after {
-  box-sizing: border-box;
+/* ── Theme Variables ────────────────────────────────────────────
+   theme-dark  = original look (default)
+   theme-light = light mode
+   All existing classes (text-warm-white, text-muted, bg-surface…)
+   continue to work — they now READ from these CSS variables.
+─────────────────────────────────────────────────────────────── */
+
+:root,
+.theme-dark {
+  --bg-page:          #0a0a0a;
+  --bg-surface:       #111111;
+  --bg-card:          #161616;
+  --bg-nav:           rgba(10,10,10,0.80);
+
+  --text-primary:     #f5f5f0;   /* warm-white */
+  --text-secondary:   #e8e8e2;   /* off-white  */
+  --text-muted:       #666666;
+  --text-muted-light: #999999;
+
+  --border-subtle:    rgba(245,245,240,0.08);
+  --border-hover:     rgba(245,245,240,0.30);
+
+  --outline-stroke:   #e8e8e2;   /* text-outline -webkit-text-stroke */
+
+  --grid-line:        rgba(245,245,240,0.03);
+  --noise-opacity:    0.4;
+
+  --btn-outline-border: rgba(245,245,240,0.30);
+  --btn-outline-text:   rgba(245,245,240,0.80);
+  --btn-outline-hover-bg: rgba(245,245,240,0.05);
+  --btn-outline-hover-border: #f5f5f0;
+  --btn-outline-hover-text:   #f5f5f0;
+
+  --btn-primary-bg:   #f5f5f0;
+  --btn-primary-text: #0a0a0a;
+  --btn-primary-hover-bg: #e8e8e2;
+
+  --cursor-dot:       #f5f5f0;
+  --cursor-ring:      rgba(245,245,240,0.50);
+  --cursor-ring-expanded: rgba(245,245,240,0.80);
+
+  --scrollbar-thumb:  #333;
+
+  --stat-bg:          #111111;
+  --stat-border:      rgba(245,245,240,0.05);
+
+  --skill-border:     rgba(245,245,240,0.10);
+  --skill-text:       #999999;
+  --skill-hover-border: rgba(201,169,110,0.40);
+  --skill-hover-text:   #f5f5f0;
+
+  --top-line:         rgba(245,245,240,0.10);
+  --vignette-end:     #0a0a0a;
+
+  --contact-bg-glow:  rgba(201,169,110,0.04);
+  --social-hover:     #f5f5f0;
+
+  --footer-border:    rgba(245,245,240,0.05);
 }
 
-html {
-  scroll-behavior: smooth;
+.theme-light {
+  --bg-page:          #f5f4f0;
+  --bg-surface:       #eceae4;
+  --bg-card:          #e4e2dc;
+  --bg-nav:           rgba(245,244,240,0.85);
+
+  --text-primary:     #0f0f0d;
+  --text-secondary:   #1a1a18;
+  --text-muted:       #888880;
+  --text-muted-light: #5a5a54;
+
+  --border-subtle:    rgba(10,10,8,0.10);
+  --border-hover:     rgba(10,10,8,0.40);
+
+  --outline-stroke:   #0f0f0d;
+
+  --grid-line:        rgba(10,10,8,0.04);
+  --noise-opacity:    0.25;
+
+  --btn-outline-border: rgba(10,10,8,0.35);
+  --btn-outline-text:   rgba(10,10,8,0.75);
+  --btn-outline-hover-bg: rgba(10,10,8,0.06);
+  --btn-outline-hover-border: #0f0f0d;
+  --btn-outline-hover-text:   #0f0f0d;
+
+  --btn-primary-bg:   #0f0f0d;
+  --btn-primary-text: #f5f4f0;
+  --btn-primary-hover-bg: #1a1a18;
+
+  --cursor-dot:       #0f0f0d;
+  --cursor-ring:      rgba(10,10,8,0.40);
+  --cursor-ring-expanded: rgba(10,10,8,0.75);
+
+  --scrollbar-thumb:  #bbb;
+
+  --stat-bg:          #eceae4;
+  --stat-border:      rgba(10,10,8,0.08);
+
+  --skill-border:     rgba(10,10,8,0.12);
+  --skill-text:       #5a5a54;
+  --skill-hover-border: rgba(201,169,110,0.60);
+  --skill-hover-text:   #0f0f0d;
+
+  --top-line:         rgba(10,10,8,0.12);
+  --vignette-end:     #f5f4f0;
+
+  --contact-bg-glow:  rgba(201,169,110,0.07);
+  --social-hover:     #0f0f0d;
+
+  --footer-border:    rgba(10,10,8,0.08);
 }
+
+/* ── Base Reset ── */
+*, *::before, *::after { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
 
 body {
   margin: 0;
-  background-color: #0a0a0a;
-  color: #e8e8e2;
+  background-color: var(--bg-page);
+  color: var(--text-primary);
   font-family: 'Inter', system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   overflow-x: hidden;
   cursor: none;
+  transition: background-color 0.5s ease, color 0.5s ease;
 }
 
 /* ── Hide default cursor everywhere ── */
-*, *:hover {
-  cursor: none !important;
-}
+*, *:hover { cursor: none !important; }
 
 /* ── Scrollbar ── */
-::-webkit-scrollbar {
-  width: 4px;
-}
-::-webkit-scrollbar-track {
-  background: #0a0a0a;
-}
-::-webkit-scrollbar-thumb {
-  background: #333;
-  border-radius: 2px;
-}
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: var(--bg-page); }
+::-webkit-scrollbar-thumb { background: var(--scrollbar-thumb); border-radius: 2px; }
 
 /* ── Custom Cursor ── */
 .cursor-dot {
   position: fixed;
-  width: 6px;
-  height: 6px;
-  background: #f5f5f0;
+  width: 6px; height: 6px;
+  background: var(--cursor-dot);
   border-radius: 50%;
   pointer-events: none;
   z-index: 99999;
   transform: translate(-50%, -50%);
   transition: opacity 0.2s, transform 0.1s;
 }
-
 .cursor-ring {
   position: fixed;
-  width: 36px;
-  height: 36px;
-  border: 1px solid rgba(245, 245, 240, 0.5);
+  width: 36px; height: 36px;
+  border: 1px solid var(--cursor-ring);
   border-radius: 50%;
   pointer-events: none;
   z-index: 99998;
   transform: translate(-50%, -50%);
   transition: width 0.3s ease, height 0.3s ease, border-color 0.3s ease, opacity 0.3s;
 }
-
 .cursor-dot.expanded {
   opacity: 0;
   transform: translate(-50%, -50%) scale(0);
 }
-
 .cursor-ring.expanded {
-  width: 64px;
-  height: 64px;
-  border-color: rgba(245, 245, 240, 0.8);
-  background: rgba(245, 245, 240, 0.04);
+  width: 64px; height: 64px;
+  border-color: var(--cursor-ring-expanded);
+  background: rgba(245,245,240,0.04);
 }
 
 /* ── Grid Texture ── */
 .grid-texture {
   background-image:
-    linear-gradient(rgba(245,245,240,0.03) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(245,245,240,0.03) 1px, transparent 1px);
+    linear-gradient(var(--grid-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
   background-size: 60px 60px;
 }
 
 /* ── Outlined Heading ── */
 .text-outline {
-  -webkit-text-stroke: 1px #e8e8e2;
+  -webkit-text-stroke: 1px var(--outline-stroke);
   color: transparent;
 }
-
 .text-outline-accent {
   -webkit-text-stroke: 1px #c9a96e;
   color: transparent;
@@ -103,20 +195,19 @@ body {
 /* ── Noise overlay ── */
 .noise-overlay::before {
   content: '';
-  position: absolute;
-  inset: 0;
+  position: absolute; inset: 0;
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
   pointer-events: none;
   z-index: 1;
-  opacity: 0.4;
+  opacity: var(--noise-opacity);
 }
 
-/* ── Project Card overlay ── */
+/* ── Project Card overlay (unchanged) ── */
 .project-card-overlay {
   background: linear-gradient(
     to bottom,
     transparent 40%,
-    rgba(10, 10, 10, 0.9) 100%
+    rgba(10,10,10,0.9) 100%
   );
 }
 
@@ -130,36 +221,45 @@ body {
 
 /* ── Divider line ── */
 .divider {
-  width: 40px;
-  height: 1px;
+  width: 40px; height: 1px;
   background: #c9a96e;
   display: inline-block;
 }
 
 /* ── Button styles ── */
 .btn-outline {
-  @apply inline-flex items-center gap-3 border border-warm-white/30 text-warm-white/80 
-         font-mono text-xs tracking-widest uppercase px-8 py-4
-         transition-all duration-500;
+  @apply inline-flex items-center gap-3 font-mono text-xs tracking-widest uppercase px-8 py-4 transition-all duration-500;
+  border: 1px solid var(--btn-outline-border);
+  color: var(--btn-outline-text);
 }
-
 .btn-outline:hover {
-  @apply border-warm-white text-warm-white bg-warm-white/5;
+  border-color: var(--btn-outline-hover-border);
+  color: var(--btn-outline-hover-text);
+  background: var(--btn-outline-hover-bg);
 }
 
 .btn-primary {
-  @apply inline-flex items-center gap-3 bg-warm-white text-black 
-         font-mono text-xs tracking-widest uppercase px-8 py-4
-         transition-all duration-500;
+  @apply inline-flex items-center gap-3 font-mono text-xs tracking-widest uppercase px-8 py-4 transition-all duration-500;
+  background: var(--btn-primary-bg);
+  color: var(--btn-primary-text);
 }
-
 .btn-primary:hover {
-  @apply bg-off-white scale-[0.98];
+  background: var(--btn-primary-hover-bg);
+  transform: scale(0.98);
 }
 
 /* ── Video card ── */
-.video-card video {
-  object-fit: cover;
-  width: 100%;
-  height: 100%;
+.video-card video { object-fit: cover; width: 100%; height: 100%; }
+
+/* ── Theme transition ── */
+.theme-root * {
+  transition-property: background-color, border-color, color;
+  transition-duration: 0.4s;
+  transition-timing-function: ease;
+}
+/* Exclude transitions that would break animations */
+.theme-root .cursor-dot,
+.theme-root .cursor-ring,
+.theme-root [style*="transform"] {
+  transition-property: none;
 }
