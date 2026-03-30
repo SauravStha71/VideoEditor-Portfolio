@@ -24,8 +24,10 @@ const itemVariants = {
 export default function About() {
   return (
     <section id="about" className="py-28 md:py-40 relative overflow-hidden">
-      <div className="absolute top-0 left-0 right-0 h-px"
-        style={{ background: 'linear-gradient(to right, transparent, var(--top-line), transparent)' }} />
+      <div
+        className="absolute top-0 left-0 right-0 h-px"
+        style={{ background: 'linear-gradient(to right, transparent, var(--top-line), transparent)' }}
+      />
 
       <div className="section-padding">
         <motion.div
@@ -38,6 +40,7 @@ export default function About() {
         </motion.div>
 
         <div className="grid lg:grid-cols-2 gap-16 lg:gap-24 items-start">
+
           {/* Left — Image + stats */}
           <motion.div
             initial={{ opacity: 0, x: -40 }} whileInView={{ opacity: 1, x: 0 }}
@@ -52,10 +55,11 @@ export default function About() {
                 loading="lazy"
                 className="w-full h-full object-cover grayscale contrast-110"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />
               <div className="absolute bottom-6 left-6">
-                <p className="font-serif text-2xl italic" style={{ color: 'var(--text-primary)' }}>Dipen Maharjan</p>
-                <p className="font-mono text-xs tracking-widest uppercase mt-1" style={{ color: 'var(--text-muted)' }}>Video Editor</p>
+                {/* Always white on the dark photo overlay */}
+                <p className="font-serif text-2xl italic text-white">Dipen Maharjan</p>
+                <p className="font-mono text-xs tracking-widest uppercase mt-1 text-white/60">Video Editor</p>
               </div>
             </div>
             <div className="absolute -top-3 -right-3 w-24 h-24 border border-accent/20 pointer-events-none" />
@@ -69,10 +73,17 @@ export default function About() {
                   viewport={{ once: true }}
                   transition={{ duration: 0.6, delay: i * 0.1 + 0.3 }}
                   className="p-4 border"
-                  style={{ background: 'var(--stat-bg)', borderColor: 'var(--stat-border)' }}
+                  style={{
+                    background: 'var(--stat-bg)',
+                    borderColor: 'var(--stat-border)',
+                  }}
                 >
-                  <p className="font-serif text-3xl font-light" style={{ color: 'var(--text-primary)' }}>{stat.value}</p>
-                  <p className="font-mono text-xs tracking-wider uppercase mt-1" style={{ color: 'var(--text-muted)' }}>{stat.label}</p>
+                  <p className="font-serif text-3xl font-light" style={{ color: 'var(--text-primary)' }}>
+                    {stat.value}
+                  </p>
+                  <p className="font-mono text-xs tracking-wider uppercase mt-1" style={{ color: 'var(--text-muted)' }}>
+                    {stat.label}
+                  </p>
                 </motion.div>
               ))}
             </div>
@@ -110,23 +121,27 @@ export default function About() {
               variants={containerVariants} initial="hidden"
               whileInView="visible" viewport={{ once: true, margin: '-80px' }}
             >
-              <p className="font-mono text-xs tracking-widest uppercase mb-6" style={{ color: 'var(--text-muted)' }}>— Expertise</p>
+              <p
+                className="font-mono text-xs tracking-widest uppercase mb-6"
+                style={{ color: 'var(--text-muted)' }}
+              >
+                — Expertise
+              </p>
               <div className="flex flex-wrap gap-3">
                 {skills.map((skill) => (
                   <motion.span
                     key={skill} variants={itemVariants}
                     className="font-mono text-xs tracking-wider px-4 py-2 border transition-all duration-300"
-                    style={{
-                      borderColor: 'var(--skill-border)',
-                      color: 'var(--skill-text)',
-                    }}
+                    style={{ borderColor: 'var(--skill-border)', color: 'var(--skill-text)' }}
                     onMouseEnter={e => {
                       e.currentTarget.style.borderColor = 'var(--skill-hover-border)';
                       e.currentTarget.style.color = 'var(--skill-hover-text)';
+                      e.currentTarget.style.background = 'var(--skill-hover-bg, transparent)';
                     }}
                     onMouseLeave={e => {
                       e.currentTarget.style.borderColor = 'var(--skill-border)';
                       e.currentTarget.style.color = 'var(--skill-text)';
+                      e.currentTarget.style.background = 'transparent';
                     }}
                   >
                     {skill}

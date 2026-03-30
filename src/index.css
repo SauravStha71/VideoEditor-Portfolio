@@ -2,13 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-/* ── Theme Variables ────────────────────────────────────────────
-   theme-dark  = original look (default)
-   theme-light = light mode
-   All existing classes (text-warm-white, text-muted, bg-surface…)
-   continue to work — they now READ from these CSS variables.
-─────────────────────────────────────────────────────────────── */
-
 :root,
 .theme-dark {
   --bg-page:          #0a0a0a;
@@ -16,102 +9,112 @@
   --bg-card:          #161616;
   --bg-nav:           rgba(10,10,10,0.80);
 
-  --text-primary:     #f5f5f0;   /* warm-white */
-  --text-secondary:   #e8e8e2;   /* off-white  */
+  --text-primary:     #f5f5f0;
+  --text-secondary:   #e8e8e2;
   --text-muted:       #666666;
   --text-muted-light: #999999;
 
   --border-subtle:    rgba(245,245,240,0.08);
   --border-hover:     rgba(245,245,240,0.30);
-
-  --outline-stroke:   #e8e8e2;   /* text-outline -webkit-text-stroke */
-
+  --outline-stroke:   #e8e8e2;
   --grid-line:        rgba(245,245,240,0.03);
   --noise-opacity:    0.4;
 
-  --btn-outline-border: rgba(245,245,240,0.30);
-  --btn-outline-text:   rgba(245,245,240,0.80);
-  --btn-outline-hover-bg: rgba(245,245,240,0.05);
+  --btn-outline-border:       rgba(245,245,240,0.30);
+  --btn-outline-text:         rgba(245,245,240,0.80);
+  --btn-outline-hover-bg:     rgba(245,245,240,0.05);
   --btn-outline-hover-border: #f5f5f0;
   --btn-outline-hover-text:   #f5f5f0;
 
-  --btn-primary-bg:   #f5f5f0;
-  --btn-primary-text: #0a0a0a;
+  --btn-primary-bg:       #f5f5f0;
+  --btn-primary-text:     #0a0a0a;
   --btn-primary-hover-bg: #e8e8e2;
 
-  --cursor-dot:       #f5f5f0;
-  --cursor-ring:      rgba(245,245,240,0.50);
+  --cursor-dot:           #f5f5f0;
+  --cursor-ring:          rgba(245,245,240,0.50);
   --cursor-ring-expanded: rgba(245,245,240,0.80);
 
   --scrollbar-thumb:  #333;
 
   --stat-bg:          #111111;
-  --stat-border:      rgba(245,245,240,0.05);
+  --stat-border:      rgba(245,245,240,0.08);
 
-  --skill-border:     rgba(245,245,240,0.10);
-  --skill-text:       #999999;
-  --skill-hover-border: rgba(201,169,110,0.40);
-  --skill-hover-text:   #f5f5f0;
+  --skill-border:           rgba(245,245,240,0.12);
+  --skill-text:             #999999;
+  --skill-hover-border:     rgba(201,169,110,0.50);
+  --skill-hover-text:       #f5f5f0;
 
   --top-line:         rgba(245,245,240,0.10);
   --vignette-end:     #0a0a0a;
-
   --contact-bg-glow:  rgba(201,169,110,0.04);
   --social-hover:     #f5f5f0;
+  --footer-border:    rgba(245,245,240,0.07);
 
-  --footer-border:    rgba(245,245,240,0.05);
+  --section-divider:  rgba(245,245,240,0.06);
+  --work-heading:     #f5f5f0;
+  --work-desc:        #666666;
 }
 
 .theme-light {
-  --bg-page:          #f5f4f0;
-  --bg-surface:       #eceae4;
-  --bg-card:          #e4e2dc;
-  --bg-nav:           rgba(245,244,240,0.85);
+  /* ── Backgrounds — clearly stepped so sections feel distinct ── */
+  --bg-page:          #f0ede6;   /* warm parchment */
+  --bg-surface:       #e2ddd5;   /* noticeably darker than page */
+  --bg-card:          #d8d3c9;   /* card hover states */
+  --bg-nav:           rgba(240,237,230,0.92);
 
-  --text-primary:     #0f0f0d;
-  --text-secondary:   #1a1a18;
-  --text-muted:       #888880;
-  --text-muted-light: #5a5a54;
+  /* ── Text — high contrast ── */
+  --text-primary:     #111110;   /* near black */
+  --text-secondary:   #222220;
+  --text-muted:       #6b6860;   /* clear mid-tone */
+  --text-muted-light: #3d3c38;   /* much darker than before */
 
-  --border-subtle:    rgba(10,10,8,0.10);
-  --border-hover:     rgba(10,10,8,0.40);
+  /* ── Borders ── */
+  --border-subtle:    rgba(10,10,8,0.14);
+  --border-hover:     rgba(10,10,8,0.50);
+  --outline-stroke:   #111110;
 
-  --outline-stroke:   #0f0f0d;
+  /* ── Texture ── */
+  --grid-line:        rgba(10,10,8,0.06);
+  --noise-opacity:    0.20;
 
-  --grid-line:        rgba(10,10,8,0.04);
-  --noise-opacity:    0.25;
+  /* ── Buttons ── */
+  --btn-outline-border:       rgba(10,10,8,0.45);
+  --btn-outline-text:         #111110;
+  --btn-outline-hover-bg:     rgba(10,10,8,0.08);
+  --btn-outline-hover-border: #111110;
+  --btn-outline-hover-text:   #111110;
 
-  --btn-outline-border: rgba(10,10,8,0.35);
-  --btn-outline-text:   rgba(10,10,8,0.75);
-  --btn-outline-hover-bg: rgba(10,10,8,0.06);
-  --btn-outline-hover-border: #0f0f0d;
-  --btn-outline-hover-text:   #0f0f0d;
+  --btn-primary-bg:       #111110;
+  --btn-primary-text:     #f0ede6;
+  --btn-primary-hover-bg: #2a2a28;
 
-  --btn-primary-bg:   #0f0f0d;
-  --btn-primary-text: #f5f4f0;
-  --btn-primary-hover-bg: #1a1a18;
+  /* ── Cursor ── */
+  --cursor-dot:           #111110;
+  --cursor-ring:          rgba(10,10,8,0.45);
+  --cursor-ring-expanded: rgba(10,10,8,0.80);
 
-  --cursor-dot:       #0f0f0d;
-  --cursor-ring:      rgba(10,10,8,0.40);
-  --cursor-ring-expanded: rgba(10,10,8,0.75);
+  --scrollbar-thumb:  #aaa8a0;
 
-  --scrollbar-thumb:  #bbb;
+  /* ── Stat cards — clearly visible boxes ── */
+  --stat-bg:          #d8d3c9;
+  --stat-border:      rgba(10,10,8,0.18);
 
-  --stat-bg:          #eceae4;
-  --stat-border:      rgba(10,10,8,0.08);
+  /* ── Skill tags ── */
+  --skill-border:           rgba(10,10,8,0.22);
+  --skill-text:             #3d3c38;
+  --skill-hover-border:     #c9a96e;
+  --skill-hover-text:       #111110;
 
-  --skill-border:     rgba(10,10,8,0.12);
-  --skill-text:       #5a5a54;
-  --skill-hover-border: rgba(201,169,110,0.60);
-  --skill-hover-text:   #0f0f0d;
+  /* ── Decorative ── */
+  --top-line:         rgba(10,10,8,0.18);
+  --vignette-end:     #f0ede6;
+  --contact-bg-glow:  rgba(201,169,110,0.10);
+  --social-hover:     #111110;
+  --footer-border:    rgba(10,10,8,0.14);
 
-  --top-line:         rgba(10,10,8,0.12);
-  --vignette-end:     #f5f4f0;
-
-  --contact-bg-glow:  rgba(201,169,110,0.07);
-  --social-hover:     #0f0f0d;
-
-  --footer-border:    rgba(10,10,8,0.08);
+  --section-divider:  rgba(10,10,8,0.08);
+  --work-heading:     #111110;
+  --work-desc:        #5a5852;
 }
 
 /* ── Base Reset ── */
@@ -130,10 +133,8 @@ body {
   transition: background-color 0.5s ease, color 0.5s ease;
 }
 
-/* ── Hide default cursor everywhere ── */
 *, *:hover { cursor: none !important; }
 
-/* ── Scrollbar ── */
 ::-webkit-scrollbar { width: 4px; }
 ::-webkit-scrollbar-track { background: var(--bg-page); }
 ::-webkit-scrollbar-thumb { background: var(--scrollbar-thumb); border-radius: 2px; }
@@ -166,7 +167,7 @@ body {
 .cursor-ring.expanded {
   width: 64px; height: 64px;
   border-color: var(--cursor-ring-expanded);
-  background: rgba(245,245,240,0.04);
+  background: rgba(10,10,8,0.04);
 }
 
 /* ── Grid Texture ── */
@@ -202,7 +203,7 @@ body {
   opacity: var(--noise-opacity);
 }
 
-/* ── Project Card overlay (unchanged) ── */
+/* ── Project Card overlay ── */
 .project-card-overlay {
   background: linear-gradient(
     to bottom,
@@ -257,9 +258,19 @@ body {
   transition-duration: 0.4s;
   transition-timing-function: ease;
 }
-/* Exclude transitions that would break animations */
 .theme-root .cursor-dot,
 .theme-root .cursor-ring,
 .theme-root [style*="transform"] {
   transition-property: none;
+}
+
+/* ── Light mode section backgrounds — alternate for visual rhythm ── */
+.theme-light #work {
+  background: var(--bg-page);
+}
+.theme-light #about {
+  background: var(--bg-surface);
+}
+.theme-light #contact {
+  background: var(--bg-page);
 }
