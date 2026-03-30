@@ -46,8 +46,8 @@ export default function Hero() {
           className="flex items-center gap-3 mb-8 sm:mb-10"
         >
           <span className="divider" />
-          <span className="font-mono text-xs tracking-ultra uppercase" style={{ color: 'var(--text-muted)' }}>
-            Portfolio — 2026
+          <span className="font-mono text-xs tracking-ultra uppercase text-accent">
+            Portfolio — {new Date().getFullYear()}
           </span>
         </motion.div>
 
