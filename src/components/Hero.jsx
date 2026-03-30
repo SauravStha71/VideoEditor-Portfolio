@@ -1,5 +1,7 @@
-import { useRef } from 'react';
-import { motion, useScroll, useTransform } from 'framer-motion';
+import { useRef, useState, useEffect } from 'react';
+import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion';
+
+const roles = ['Video Editor', 'Motion Designer', 'Visual Storyteller'];
 
 export default function Hero() {
   const containerRef = useRef(null);
@@ -10,18 +12,25 @@ export default function Hero() {
   const y = useTransform(scrollYProgress, [0, 1], ['0%', '20%']);
   const opacity = useTransform(scrollYProgress, [0, 0.6], [1, 0]);
 
+  const [roleIndex, setRoleIndex] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setRoleIndex((prev) => (prev + 1) % roles.length);
+    }, 2500);
+    return () => clearInterval(interval);
+  }, []);
+
   return (
     <section
       ref={containerRef}
       id="hero"
       className="relative min-h-screen flex flex-col justify-center overflow-hidden grid-texture noise-overlay"
     >
-      {/* Gradient vignette */}
       <div className="absolute inset-0 pointer-events-none"
         style={{ background: 'radial-gradient(ellipse at center, transparent 30%, var(--vignette-end) 100%)' }}
       />
 
-      {/* Accent line top */}
       <motion.div
         initial={{ scaleX: 0 }} animate={{ scaleX: 1 }}
         transition={{ duration: 1.2, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
@@ -31,7 +40,6 @@ export default function Hero() {
       <motion.div style={{ y, opacity }}
         className="section-padding relative z-10 pt-28 sm:pt-32 pb-28 sm:pb-36"
       >
-        {/* Eyebrow */}
         <motion.div
           initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.4 }}
@@ -43,7 +51,6 @@ export default function Hero() {
           </span>
         </motion.div>
 
-        {/* Heading — first name */}
         <div className="overflow-hidden mb-1 sm:mb-4">
           <motion.h1
             initial={{ y: '100%' }} animate={{ y: 0 }}
@@ -55,8 +62,7 @@ export default function Hero() {
           </motion.h1>
         </div>
 
-        {/* Heading — last name (outline) */}
-        <div className="overflow-hidden mb-8 sm:mb-10">
+        <div className="overflow-hidden mb-10 sm:mb-14">
           <motion.h1
             initial={{ y: '100%' }} animate={{ y: 0 }}
             transition={{ duration: 1, delay: 0.65, ease: [0.22, 1, 0.36, 1] }}
@@ -67,27 +73,59 @@ export default function Hero() {
           </motion.h1>
         </div>
 
-        {/* Subtitle row */}
+        {/* Rolling role text */}
         <motion.div
           initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.9 }}
-          className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-5 sm:gap-8 mt-2 sm:pr-20 md:pr-24 lg:pr-20 xl:pr-16"
+          transition={{ duration: 0.8, delay: 0.85 }}
+          className="mb-10 sm:mb-12"
         >
-          <p className="font-mono text-xs sm:text-sm tracking-widest uppercase max-w-xs" style={{ color: 'var(--text-muted)' }}>
-            Video Editor, Motion Designer &amp; Visual Storyteller
-          </p>
-          <div className="flex items-center gap-6">
-            <a href="#work" className="btn-outline group" data-cursor="expand">
-              <span>View Work</span>
-              <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-300"
-                fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-              </svg>
-            </a>
+          <div className="overflow-hidden" style={{ height: 'clamp(2.8rem, 6vw, 5rem)' }}>
+            <AnimatePresence mode="wait">
+              <motion.p
+                key={roleIndex}
+                initial={{ y: '100%', opacity: 0 }}
+                animate={{ y: '0%', opacity: 1 }}
+                exit={{ y: '-100%', opacity: 0 }}
+                transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
+                className="font-serif italic font-light leading-none tracking-tight"
+                style={{
+                  fontSize: 'clamp(2.8rem, 6vw, 5rem)',
+                  color: 'var(--text-primary)',
+                  lineHeight: 1,
+                }}
+              >
+                {roles[roleIndex].split(' ').map((word, i) => (
+                  <span
+                    key={i}
+                    style={{
+                      color: i === 0 ? 'var(--text-primary)' : 'var(--text-muted-light)',
+                      marginRight: '0.3em',
+                    }}
+                  >
+                    {word}
+                  </span>
+                ))}
+              </motion.p>
+            </AnimatePresence>
           </div>
         </motion.div>
 
-        {/* Location — mobile only, inline */}
+        {/* View Work button */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 1.0 }}
+          className="flex items-center sm:pr-20 md:pr-24 lg:pr-20 xl:pr-16"
+        >
+          <a href="#work" className="btn-outline group" data-cursor="expand">
+            <span>View Work</span>
+            <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-300"
+              fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+            </svg>
+          </a>
+        </motion.div>
+
+        {/* Location — mobile only */}
         <motion.div
           initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 1.1 }}
