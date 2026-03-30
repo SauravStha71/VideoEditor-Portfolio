@@ -25,19 +25,19 @@ function ThemeToggle() {
         }}
       >
         <span
-          className="absolute top-0.5 left-0.5 w-4 h-4 rounded-full transition-all duration-400 flex items-center justify-center"
+          className="absolute w-4 h-4 rounded-full transition-all duration-400 flex items-center justify-center"
           style={{
             background: isDark ? '#c9a96e' : '#0f0f0d',
-            transform: isDark ? 'translateX(0)' : 'translateX(20px)',
+            top: '50%',
+            transform: isDark ? 'translateX(0) translateY(-50%)' : 'translateX(20px) translateY(-50%)',
+            left: '2px',
           }}
         >
           {isDark ? (
-            /* Moon icon */
             <svg width="9" height="9" viewBox="0 0 24 24" fill="white">
               <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
             </svg>
           ) : (
-            /* Sun icon */
             <svg width="9" height="9" viewBox="0 0 24 24" fill="white" stroke="white" strokeWidth="2">
               <circle cx="12" cy="12" r="5"/>
               <line x1="12" y1="1" x2="12" y2="3"/>
