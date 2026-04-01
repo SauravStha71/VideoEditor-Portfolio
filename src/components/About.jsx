@@ -1,4 +1,5 @@
-import { motion } from 'framer-motion';
+import { motion, useInView } from 'framer-motion';
+import { useRef, useEffect, useState } from 'react';
 
 const skills = [
   'Video Editing', 'Color Grading', 'Motion Graphics',
@@ -7,9 +8,9 @@ const skills = [
 ];
 
 const stats = [
-  { value: '8+', label: 'Years Experience' },
-  { value: '120+', label: 'Projects Delivered' },
-  { value: '40+', label: 'Global Clients' },
+  { value: 8,   suffix: '+', label: 'Years Experience' },
+  { value: 120, suffix: '+', label: 'Projects Delivered' },
+  { value: 40,  suffix: '+', label: 'Global Clients' },
 ];
 
 const containerVariants = {
@@ -21,7 +22,60 @@ const itemVariants = {
   visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] } },
 };
 
+// ── Animated counter hook ──
+function useCounter(target, duration = 1800, startCounting) {
+  const [count, setCount] = useState(0);
+
+  useEffect(() => {
+    if (!startCounting) {
+      setCount(0); // reset when out of view
+      return;
+    }
+    let startTime = null;
+    let raf;
+    const step = (timestamp) => {
+      if (!startTime) startTime = timestamp;
+      const progress = Math.min((timestamp - startTime) / duration, 1);
+      const eased = 1 - Math.pow(1 - progress, 3); // cubic ease-out
+      setCount(Math.floor(eased * target));
+      if (progress < 1) raf = requestAnimationFrame(step);
+      else setCount(target);
+    };
+    raf = requestAnimationFrame(step);
+    return () => cancelAnimationFrame(raf);
+  }, [startCounting, target, duration]);
+
+  return count;
+}
+
+// ── Single stat card ──
+function StatCard({ stat, index, shouldStart }) {
+  const count = useCounter(stat.value, 1600 + index * 200, shouldStart);
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.6, delay: index * 0.1 + 0.3 }}
+      className="p-4 border"
+      style={{ background: 'var(--stat-bg)', borderColor: 'var(--stat-border)' }}
+    >
+      <p className="font-serif text-3xl font-light" style={{ color: 'var(--text-primary)' }}>
+        {count}{stat.suffix}
+      </p>
+      <p className="font-mono text-xs tracking-wider uppercase mt-1" style={{ color: 'var(--text-muted)' }}>
+        {stat.label}
+      </p>
+    </motion.div>
+  );
+}
+
 export default function About() {
+  const statsRef = useRef(null);
+  // once: false — replays every time stats scroll into view
+  const isInView = useInView(statsRef, { once: false, margin: '-80px' });
+
   return (
     <section id="about" className="py-28 md:py-40 relative overflow-hidden">
       <div
@@ -57,34 +111,16 @@ export default function About() {
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />
               <div className="absolute bottom-6 left-6">
-                {/* Always white on the dark photo overlay */}
                 <p className="font-serif text-2xl italic text-white">Dipen Maharjan</p>
                 <p className="font-mono text-xs tracking-widest uppercase mt-1 text-white/60">Video Editor</p>
               </div>
             </div>
             <div className="absolute -top-3 -right-3 w-24 h-24 border border-accent/20 pointer-events-none" />
 
-            {/* Stats */}
-            <div className="grid grid-cols-3 gap-4 mt-6">
+            {/* Animated stats */}
+            <div ref={statsRef} className="grid grid-cols-3 gap-4 mt-6">
               {stats.map((stat, i) => (
-                <motion.div
-                  key={stat.label}
-                  initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.6, delay: i * 0.1 + 0.3 }}
-                  className="p-4 border"
-                  style={{
-                    background: 'var(--stat-bg)',
-                    borderColor: 'var(--stat-border)',
-                  }}
-                >
-                  <p className="font-serif text-3xl font-light" style={{ color: 'var(--text-primary)' }}>
-                    {stat.value}
-                  </p>
-                  <p className="font-mono text-xs tracking-wider uppercase mt-1" style={{ color: 'var(--text-muted)' }}>
-                    {stat.label}
-                  </p>
-                </motion.div>
+                <StatCard key={stat.label} stat={stat} index={i} shouldStart={isInView} />
               ))}
             </div>
           </motion.div>
