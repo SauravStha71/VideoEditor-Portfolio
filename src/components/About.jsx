@@ -143,7 +143,7 @@ export default function About() {
               className="space-y-5 mb-12"
             >
               <p className="leading-relaxed text-base font-light" style={{ color: 'var(--text-muted-light)' }}>
-                I'm an Ontario based video editor with over 8 years of experience crafting
+                I'm an Toronto based video editor with over 8 years of experience crafting
                 cinematic narratives. From documentary to high-fashion campaigns, I believe
                 every frame has a story to tell.
               </p>

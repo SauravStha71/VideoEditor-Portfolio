@@ -79,13 +79,13 @@ export default function Contact() {
           viewport={{ once: true }} transition={{ duration: 0.8, delay: 0.25 }}
           className="mb-16"
         >
-          <a href="mailto:hello@dipenmaharjan.com" className="btn-primary group" data-cursor="expand">
+          <a href="mailto:maharjananjit@gmail.com" className="btn-primary group" data-cursor="expand">
             <svg className="w-4 h-4 group-hover:-translate-y-0.5 transition-transform duration-300"
               fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5}
                 d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
             </svg>
-            <span>hello@dipenmaharjan.com</span>
+            <span>maharjananjit@gmail.com</span>
           </a>
         </motion.div>
 
