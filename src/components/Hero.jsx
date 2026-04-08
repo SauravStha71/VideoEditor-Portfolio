@@ -1,7 +1,7 @@
 import { useRef, useState, useEffect } from 'react';
 import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion';
 
-const roles = ['Video Editor', 'Motion Designer', 'Visual Storyteller'];
+const roles = ['Video Editor', 'Motion Designer', 'Sound Designer'];
 
 export default function Hero() {
   const containerRef = useRef(null);
