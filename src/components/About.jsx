@@ -143,13 +143,14 @@ export default function About() {
               className="space-y-5 mb-12"
             >
               <p className="leading-relaxed text-base font-light" style={{ color: 'var(--text-muted-light)' }}>
-                I'm an Toronto based video editor with over 8 years of experience crafting
-                cinematic narratives. From documentary to high-fashion campaigns, I believe
-                every frame has a story to tell.
+                Toronto-based Video Editor & Motion Designer with experience across agency, freelance, and in-house environments.
+              </p>
+              <p className="leading-relaxed text-base font-light" style={{ color: 'var(--text-muted-light)' }}>
+                Specializing in short form and long form content, my work has accumulated 5M+ views in short form and 200K+ views in long form — crafting visuals for big brands and corporate clients alike.
+
               </p>
               <p className="leading-relaxed text-base font-light" style={{ color: 'var(--text-muted)' }}>
-                My work spans short films, music videos, commercial campaigns, and branded
-                content — always with an eye for rhythm, light, and emotional resonance.
+                From scroll-stopping reels to cinematic long form stories, I bring both creative instinct and technical precision to every frame.
               </p>
             </motion.div>
 
