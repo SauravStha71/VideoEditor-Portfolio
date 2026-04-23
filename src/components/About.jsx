@@ -9,9 +9,10 @@ const skills = [
 ];
 
 const stats = [
-  { value: 8,   suffix: '+', label: 'Years Experience' },
-  { value: 120, suffix: '+', label: 'Projects Delivered' },
-  { value: 40,  suffix: '+', label: 'Global Clients' },
+  { value: 8,    suffix: '+',  label: 'Years Experience' },
+  { value: 500,  suffix: '+',  label: 'Videos Edited' },
+  { value: 5,    suffix: 'M+', label: 'Short Form Views' },
+  { value: 200,  suffix: 'K+', label: 'Long Form Views' },
 ];
 
 const containerVariants = {
@@ -118,7 +119,7 @@ export default function About() {
             <div className="absolute -top-3 -right-3 w-24 h-24 border border-accent/20 pointer-events-none" />
 
             {/* Animated stats */}
-            <div ref={statsRef} className="grid grid-cols-3 gap-4 mt-6">
+            <div ref={statsRef} className="grid grid-cols-2 gap-4 mt-6">
               {stats.map((stat, i) => (
                 <StatCard key={stat.label} stat={stat} index={i} shouldStart={isInView} />
               ))}
