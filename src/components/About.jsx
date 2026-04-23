@@ -1,5 +1,6 @@
 import { motion, useInView } from 'framer-motion';
 import { useRef, useEffect, useState } from 'react';
+import dipenPhoto from '../assets/Dipen.jpg';
 
 const skills = [
   'Video Editing', 'Color Grading', 'Motion Graphics',
@@ -28,7 +29,7 @@ function useCounter(target, duration = 1800, startCounting) {
 
   useEffect(() => {
     if (!startCounting) {
-      setCount(0); // reset when out of view
+      setCount(0);
       return;
     }
     let startTime = null;
@@ -36,7 +37,7 @@ function useCounter(target, duration = 1800, startCounting) {
     const step = (timestamp) => {
       if (!startTime) startTime = timestamp;
       const progress = Math.min((timestamp - startTime) / duration, 1);
-      const eased = 1 - Math.pow(1 - progress, 3); // cubic ease-out
+      const eased = 1 - Math.pow(1 - progress, 3);
       setCount(Math.floor(eased * target));
       if (progress < 1) raf = requestAnimationFrame(step);
       else setCount(target);
@@ -73,7 +74,6 @@ function StatCard({ stat, index, shouldStart }) {
 
 export default function About() {
   const statsRef = useRef(null);
-  // once: false — replays every time stats scroll into view
   const isInView = useInView(statsRef, { once: false, margin: '-80px' });
 
   return (
@@ -104,7 +104,7 @@ export default function About() {
           >
             <div className="relative aspect-[3/4] overflow-hidden" style={{ background: 'var(--bg-surface)' }}>
               <img
-                src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=800&q=80"
+                src={dipenPhoto}
                 alt="Dipen Maharjan — Video Editor"
                 loading="lazy"
                 className="w-full h-full object-cover grayscale contrast-110"
