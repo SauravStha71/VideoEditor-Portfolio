@@ -274,3 +274,371 @@ body {
 .theme-light #contact {
   background: var(--bg-page);
 }
+
+/* ════════════════════════════════════════════════════════════════════
+   GALLERY SECTION
+   ════════════════════════════════════════════════════════════════════ */
+
+/* ── Section wrapper ── */
+.gallery-section {
+  padding-top: clamp(5rem, 10vw, 10rem);
+  padding-bottom: clamp(5rem, 10vw, 10rem);
+}
+
+/* ── Header ── */
+.gallery-header {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+@media (min-width: 768px) {
+  .gallery-header {
+    flex-direction: row;
+    align-items: flex-end;
+    justify-content: space-between;
+    margin-bottom: 2.5rem;
+  }
+}
+
+.gallery-eyebrow {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #c9a96e;
+  margin-bottom: 1rem;
+}
+
+.gallery-title {
+  font-family: 'DM Serif Display', serif;
+  font-weight: 300;
+  font-style: italic;
+  line-height: 1;
+  font-size: clamp(3rem, 8vw, 8rem);
+  color: var(--text-primary);
+}
+
+.gallery-desc {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+  line-height: 1.8;
+  max-width: 22rem;
+  color: var(--text-muted);
+}
+
+/* ── Live indicator ── */
+.gallery-live {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1.75rem;
+}
+.gallery-live__dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #4ade80;
+  animation: gallery-pulse 2s ease-in-out infinite;
+}
+@keyframes gallery-pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%       { opacity: 0.5; transform: scale(0.8); }
+}
+.gallery-live__label {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+/* ── Filter pills ── */
+.gallery-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 3rem;
+}
+
+.gallery-filter-pill {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 0.45rem 1rem;
+  border: 1px solid var(--border-subtle);
+  color: var(--text-muted);
+  background: transparent;
+  transition: all 0.3s ease;
+  cursor: none;
+}
+.gallery-filter-pill:hover {
+  border-color: var(--border-hover);
+  color: var(--text-primary);
+}
+.gallery-filter-pill--active {
+  border-color: #c9a96e !important;
+  color: #c9a96e !important;
+  background: rgba(201, 169, 110, 0.08);
+}
+
+/* ════════════════════════════════
+   MASONRY GRID
+   ════════════════════════════════ */
+.gallery-grid {
+  columns: 1;
+  column-gap: 0.75rem;
+}
+@media (min-width: 480px)  { .gallery-grid { columns: 2; } }
+@media (min-width: 900px)  { .gallery-grid { columns: 3; } }
+@media (min-width: 1400px) { .gallery-grid { columns: 4; } }
+
+/* ── Card base ── */
+.gallery-card {
+  position: relative;
+  break-inside: avoid;
+  overflow: hidden;
+  margin-bottom: 0.75rem;
+  cursor: none;
+  background: var(--bg-surface);
+}
+
+/* Vertical card — taller natural box */
+.gallery-card--vertical {
+  aspect-ratio: 9 / 16;
+}
+
+/* Horizontal card — wider box */
+.gallery-card--horizontal {
+  aspect-ratio: 16 / 9;
+}
+
+/* ── Media inside card ── */
+.gallery-media {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transition: opacity 0.5s ease, transform 0.6s ease;
+  will-change: transform;
+}
+.gallery-media--visible {
+  opacity: 1;
+}
+.gallery-card:hover .gallery-media {
+  transform: scale(1.04);
+}
+
+/* ── Gradient overlay ── */
+.gallery-card__overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    transparent 50%,
+    rgba(5, 5, 5, 0.85) 100%
+  );
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  pointer-events: none;
+}
+.gallery-card:hover .gallery-card__overlay {
+  opacity: 1;
+}
+
+/* ── Info label (folder + type) ── */
+.gallery-card__info {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 1rem;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 0.35s ease, transform 0.35s ease;
+  z-index: 2;
+}
+.gallery-card__info--visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+.gallery-card__folder {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(245, 245, 240, 0.9);
+}
+.gallery-card__type {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-family: 'DM Mono', monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #c9a96e;
+}
+
+/* ── Expand icon ── */
+.gallery-card__expand {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  width: 34px;
+  height: 34px;
+  border: 1px solid rgba(245, 245, 240, 0.3);
+  background: rgba(10, 10, 10, 0.5);
+  backdrop-filter: blur(6px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #f5f5f0;
+  z-index: 2;
+}
+
+/* ── Shimmer loading ── */
+@keyframes shimmer {
+  0%   { background-position: -400px 0; }
+  100% { background-position:  400px 0; }
+}
+
+.gallery-shimmer {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    var(--bg-surface) 25%,
+    var(--bg-card)    50%,
+    var(--bg-surface) 75%
+  );
+  background-size: 800px 100%;
+  animation: shimmer 1.6s infinite linear;
+}
+
+.gallery-shimmer-card {
+  break-inside: avoid;
+  margin-bottom: 0.75rem;
+  background: linear-gradient(
+    90deg,
+    var(--bg-surface) 25%,
+    var(--bg-card)    50%,
+    var(--bg-surface) 75%
+  );
+  background-size: 800px 100%;
+  animation: shimmer 1.6s infinite linear;
+}
+.gallery-shimmer-card.gallery-card--vertical   { aspect-ratio: 9 / 16; }
+.gallery-shimmer-card.gallery-card--horizontal { aspect-ratio: 16 / 9; }
+
+/* ════════════════════════════════
+   LIGHTBOX
+   ════════════════════════════════ */
+.lightbox-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 9000;
+  background: rgba(5, 5, 5, 0.93);
+  backdrop-filter: blur(14px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+
+.lightbox-content {
+  position: relative;
+  background: var(--bg-card);
+  overflow: hidden;
+  box-shadow: 0 40px 100px rgba(0, 0, 0, 0.7);
+  display: flex;
+  flex-direction: column;
+  max-height: 95dvh;
+}
+
+.lightbox-content--vertical {
+  width: min(420px, 90vw);
+}
+.lightbox-content--horizontal {
+  width: min(960px, 95vw);
+}
+
+.lightbox-media {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-height: calc(95dvh - 52px);
+  object-fit: contain;
+  background: #000;
+}
+
+.lightbox-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 1rem;
+  border-top: 1px solid var(--border-subtle);
+  flex-shrink: 0;
+}
+
+.lightbox-folder {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.68rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.lightbox-close {
+  width: 34px;
+  height: 34px;
+  border: 1px solid var(--border-subtle);
+  background: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-muted);
+  transition: all 0.25s ease;
+  cursor: none;
+}
+.lightbox-close:hover {
+  border-color: var(--border-hover);
+  color: var(--text-primary);
+}
+
+/* ── Error / empty states ── */
+.gallery-error,
+.gallery-empty {
+  text-align: center;
+  padding: 5rem 1rem;
+  color: var(--text-muted);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+}
+.gallery-error p,
+.gallery-empty p {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.8rem;
+  letter-spacing: 0.06em;
+}
+.gallery-error__hint {
+  color: var(--text-muted) !important;
+  font-size: 0.68rem !important;
+  opacity: 0.6;
+}
+
+/* ── CTA row ── */
+.gallery-cta {
+  display: flex;
+  justify-content: center;
+  margin-top: clamp(3rem, 6vw, 6rem);
+}

@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useTheme } from '../context/ThemeContext';
 
 const navLinks = [
-  { label: 'Work', href: '#work' },
+  { label: 'Gallery', href: '#work' },
   { label: 'About', href: '#about' },
   { label: 'Contact', href: '#contact' },
 ];

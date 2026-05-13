@@ -2,7 +2,7 @@ import { ThemeProvider } from './context/ThemeContext';
 import CustomCursor from './components/CustomCursor';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
-import Work from './components/Work';
+import Gallery from './components/Gallery';
 import About from './components/About';
 import Contact from './components/Contact';
 import Footer from './components/Footer';
@@ -15,7 +15,7 @@ export default function App() {
         <Navbar />
         <main>
           <Hero />
-          <Work />
+          <Gallery />
           <About />
           <Contact />
         </main>
