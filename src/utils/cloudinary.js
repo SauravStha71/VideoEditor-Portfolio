@@ -1,13 +1,13 @@
 // ─────────────────────────────────────────────
-//  Cloudinary configuration
-//  NOTE: For a production site, move api_secret
-//  to a server-side proxy so it is never public.
+//  Cloudinary delivery helpers
+//  Media data is served from the pre-built
+//  manifest (media-manifest.json) to avoid
+//  CORS issues with the Admin API and to keep
+//  the API secret off the client bundle.
 // ─────────────────────────────────────────────
-export const CLOUD_NAME  = 'du6i9l4id';
-const API_KEY    = '641667991118832';
-const API_SECRET = 'un2jZDgzyZOsJ8rn7G0U-vpwM4o';
+export const CLOUD_NAME = 'du6i9l4id';
 
-// Folders to display in the gallery
+// Folders to display in the gallery (order determines filter pill order)
 export const GALLERY_FOLDERS = [
   'Definity',
   'David Heacock',
@@ -18,16 +18,11 @@ export const GALLERY_FOLDERS = [
   'Sandeep Swadia',
 ];
 
-// Basic-auth header (base64 of "api_key:api_secret")
-function basicAuth() {
-  return btoa(`${API_KEY}:${API_SECRET}`);
-}
-
 /**
  * Build an optimised Cloudinary delivery URL.
  * @param {string} publicId
  * @param {'image'|'video'} resourceType
- * @param {object}  opts – extra transformations
+ * @param {object} opts – extra transformations
  */
 export function buildUrl(publicId, resourceType = 'image', opts = {}) {
   const transforms = ['f_auto', 'q_auto', ...(opts.extra ?? [])].join(',');
@@ -35,75 +30,28 @@ export function buildUrl(publicId, resourceType = 'image', opts = {}) {
 }
 
 /**
- * Fetch all resources inside a Cloudinary folder.
- * Uses the Admin API Search endpoint with Basic Auth.
- * Returns an array of normalised media objects.
- */
-export async function fetchFolderMedia(folder) {
-  // Use the Search API with Basic Auth.
-  // width/height/format/resource_type are returned by default — no &fields needed.
-  const expression = encodeURIComponent(`folder="${folder}"`);
-  const url =
-    `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/resources/search` +
-    `?expression=${expression}&max_results=100`;
-
-  const res = await fetch(url, {
-    headers: {
-      Authorization: `Basic ${basicAuth()}`,
-    },
-  });
-
-  if (!res.ok) {
-    throw new Error(`Cloudinary error for folder "${folder}": ${res.status} ${res.statusText}`);
-  }
-
-  const data = await res.json();
-  return (data.resources ?? []).map((r) => normalise(r, folder));
-}
-
-/**
- * Fetch media from all GALLERY_FOLDERS in parallel.
- * Returns a flat, sorted array (vertical first, then horizontal).
+ * Load all media from the local manifest.
+ * Returns a flat array sorted vertical-first, then horizontal.
  */
 export async function fetchAllMedia() {
-  const results = await Promise.allSettled(
-    GALLERY_FOLDERS.map((folder) => fetchFolderMedia(folder))
-  );
-
-  const flat = results.flatMap((r) => (r.status === 'fulfilled' ? r.value : []));
+  // Dynamic import so Vite can tree-shake and code-split the JSON.
+  const manifest = (await import('../data/media-manifest.json')).default;
 
   // Sort: vertical first, then horizontal
-  return flat.sort((a, b) => {
-    const aVertical = a.height > a.width;
-    const bVertical = b.height > b.width;
-    if (aVertical && !bVertical) return -1;
-    if (!aVertical && bVertical) return 1;
+  return [...manifest].sort((a, b) => {
+    const aV = a.height > a.width;
+    const bV = b.height > b.width;
+    if (aV && !bV) return -1;
+    if (!aV && bV) return 1;
     return 0;
   });
 }
 
-// ─── Internal helpers ────────────────────────────────────────────────────────
-
-const VIDEO_FORMATS = new Set(['mp4', 'mov', 'webm', 'avi', 'mkv', 'm4v', 'ogv']);
-
-function normalise(resource, folder) {
-  const isVideo =
-    resource.resource_type === 'video' ||
-    VIDEO_FORMATS.has((resource.format ?? '').toLowerCase());
-
-  const type = isVideo ? 'video' : 'image';
-
-  return {
-    id:        resource.public_id,
-    folder,
-    type,
-    width:     resource.width  ?? 1280,
-    height:    resource.height ?? 720,
-    url:       buildUrl(resource.public_id, type),
-    // Poster = first-frame JPEG thumbnail from Cloudinary's video pipeline
-    poster: isVideo
-      ? `https://res.cloudinary.com/${CLOUD_NAME}/video/upload/f_jpg,q_auto,w_800,so_0/${resource.public_id}`
-      : undefined,
-    isVertical: (resource.height ?? 720) > (resource.width ?? 1280),
-  };
+/**
+ * Load media for a single folder from the manifest.
+ * Kept for potential future use.
+ */
+export async function fetchFolderMedia(folder) {
+  const all = await fetchAllMedia();
+  return all.filter((item) => item.folder === folder);
 }
