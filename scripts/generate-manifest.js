@@ -14,11 +14,6 @@ import { fileURLToPath } from 'url';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
-// ── Config ────────────────────────────────────────────────
-const CLOUD_NAME = 'du6i9l4id';
-const API_KEY    = '641667991118832';
-const API_SECRET = 'un2jZDgzyZOsJ8rn7G0U-vpwM4o';
-
 const FOLDERS = [
   'Definity',
   'David Heacock',
