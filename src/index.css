@@ -148,26 +148,33 @@ body {
   pointer-events: none;
   z-index: 99999;
   transform: translate(-50%, -50%);
-  transition: opacity 0.2s, transform 0.1s;
+  will-change: left, top, transform, opacity;
+  transition: opacity 0.18s ease, transform 0.15s ease;
 }
 .cursor-ring {
   position: fixed;
   width: 36px; height: 36px;
-  border: 1px solid var(--cursor-ring);
+  border: 1.5px solid var(--cursor-ring);
   border-radius: 50%;
   pointer-events: none;
   z-index: 99998;
   transform: translate(-50%, -50%);
-  transition: width 0.3s ease, height 0.3s ease, border-color 0.3s ease, opacity 0.3s;
+  will-change: left, top, width, height, transform;
+  transition: width 0.28s cubic-bezier(0.22,1,0.36,1),
+              height 0.28s cubic-bezier(0.22,1,0.36,1),
+              border-color 0.28s ease,
+              opacity 0.25s ease,
+              transform 0.15s ease;
 }
 .cursor-dot.expanded {
   opacity: 0;
   transform: translate(-50%, -50%) scale(0);
 }
 .cursor-ring.expanded {
-  width: 64px; height: 64px;
+  width: 60px; height: 60px;
   border-color: var(--cursor-ring-expanded);
-  background: rgba(10,10,8,0.04);
+  background: rgba(201,169,110,0.05);
+  border-width: 1px;
 }
 
 /* ── Grid Texture ── */
@@ -385,34 +392,44 @@ body {
 }
 
 /* ════════════════════════════════
-   MASONRY GRID
+   RESPONSIVE GRID
    ════════════════════════════════ */
 .gallery-grid {
-  columns: 1;
-  column-gap: 0.75rem;
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-auto-flow: dense;   /* fill gaps left by span-2 cards */
+  gap: 0.75rem;
 }
-@media (min-width: 480px)  { .gallery-grid { columns: 2; } }
-@media (min-width: 900px)  { .gallery-grid { columns: 3; } }
-@media (min-width: 1400px) { .gallery-grid { columns: 4; } }
+/* 2-col: portrait phones & tablets */
+@media (min-width: 480px)  { .gallery-grid { grid-template-columns: repeat(2, 1fr); } }
+/* 3-col: landscape tablets / small laptops */
+@media (min-width: 900px)  { .gallery-grid { grid-template-columns: repeat(3, 1fr); } }
+/* 4-col: large screens */
+@media (min-width: 1400px) { .gallery-grid { grid-template-columns: repeat(4, 1fr); } }
 
 /* ── Card base ── */
 .gallery-card {
   position: relative;
-  break-inside: avoid;
   overflow: hidden;
-  margin-bottom: 0.75rem;
   cursor: none;
   background: var(--bg-surface);
+  /* no margin-bottom — gap handles spacing */
 }
 
-/* Vertical card — taller natural box */
+/* Vertical card — portrait (9:16), single column */
 .gallery-card--vertical {
+  grid-column: span 1;
   aspect-ratio: 9 / 16;
 }
 
-/* Horizontal card — wider box */
+/* Horizontal card — landscape (16:9)
+   Spans 2 columns on ≥480 px; falls back to 1 on mobile */
 .gallery-card--horizontal {
+  grid-column: span 1;
   aspect-ratio: 16 / 9;
+}
+@media (min-width: 480px) {
+  .gallery-card--horizontal { grid-column: span 2; }
 }
 
 /* ── Media inside card ── */
@@ -524,8 +541,6 @@ body {
 }
 
 .gallery-shimmer-card {
-  break-inside: avoid;
-  margin-bottom: 0.75rem;
   background: linear-gradient(
     90deg,
     var(--bg-surface) 25%,
@@ -535,8 +550,17 @@ body {
   background-size: 800px 100%;
   animation: shimmer 1.6s infinite linear;
 }
-.gallery-shimmer-card.gallery-card--vertical   { aspect-ratio: 9 / 16; }
-.gallery-shimmer-card.gallery-card--horizontal { aspect-ratio: 16 / 9; }
+.gallery-shimmer-card.gallery-card--vertical {
+  grid-column: span 1;
+  aspect-ratio: 9 / 16;
+}
+.gallery-shimmer-card.gallery-card--horizontal {
+  grid-column: span 1;
+  aspect-ratio: 16 / 9;
+}
+@media (min-width: 480px) {
+  .gallery-shimmer-card.gallery-card--horizontal { grid-column: span 2; }
+}
 
 /* ════════════════════════════════
    LIGHTBOX
