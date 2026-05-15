@@ -263,7 +263,7 @@ export default function Gallery() {
         className="gallery-live"
       >
         <span className="gallery-live__dot" />
-        <span className="gallery-live__label">Live from Cloudinary</span>
+        <span className="gallery-live__label">Clients</span>
       </motion.div>
 
       {/* ── Folder filters ── */}
