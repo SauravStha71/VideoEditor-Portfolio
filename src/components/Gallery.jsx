@@ -301,11 +301,8 @@ export default function Gallery() {
 
       {/* ── Media grid ── */}
       {!loading && !error && displayed.length > 0 && (
-        <motion.div
-          layout
-          className="gallery-grid"
-        >
-          <AnimatePresence mode="popLayout">
+        <div className="gallery-grid">
+          <AnimatePresence mode="sync">
             {displayed.map((item, i) => (
               <MediaCard
                 key={item.id}
@@ -315,7 +312,7 @@ export default function Gallery() {
               />
             ))}
           </AnimatePresence>
-        </motion.div>
+        </div>
       )}
 
       {/* ── CTA ── */}

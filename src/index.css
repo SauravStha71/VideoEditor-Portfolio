@@ -392,41 +392,32 @@ body {
 }
 
 /* ════════════════════════════════
-   RESPONSIVE GRID
+   RESPONSIVE GRID — uniform card height
+   All cards share the same 3:4 aspect ratio so every
+   row is identical height → zero gaps, correct
+   left-to-right reading order, fully responsive.
    ════════════════════════════════ */
 .gallery-grid {
   display: grid;
-  grid-template-columns: 1fr;
-  grid-auto-flow: dense;   /* fill gaps left by span-2 cards */
+  grid-template-columns: repeat(2, 1fr);
   gap: 0.75rem;
 }
-/* 2-col: portrait phones & tablets */
-@media (min-width: 480px)  { .gallery-grid { grid-template-columns: repeat(2, 1fr); } }
-/* 3-col: landscape tablets / small laptops */
+@media (max-width: 479px)  { .gallery-grid { grid-template-columns: 1fr; } }
 @media (min-width: 900px)  { .gallery-grid { grid-template-columns: repeat(3, 1fr); } }
-/* 4-col: large screens */
 @media (min-width: 1400px) { .gallery-grid { grid-template-columns: repeat(4, 1fr); } }
 
-/* ── Card base ── */
+/* ── Card base — uniform 3:4 for every card ── */
 .gallery-card {
   position: relative;
   overflow: hidden;
   cursor: none;
   background: var(--bg-surface);
-  /* no margin-bottom — gap handles spacing */
+  aspect-ratio: 3 / 4;
 }
 
-/* All cards — uniform single-column span regardless of orientation */
-.gallery-card--vertical {
-  grid-column: span 1;
-  aspect-ratio: 9 / 16;
-}
-
-/* Horizontal cards use their natural aspect-ratio but stay in 1 column */
-.gallery-card--horizontal {
-  grid-column: span 1;
-  aspect-ratio: 16 / 9;
-}
+/* Orientation classes kept for JS compatibility but no layout overrides */
+.gallery-card--vertical  { /* inherits 3:4 from base */ }
+.gallery-card--horizontal { /* inherits 3:4 from base */ }
 
 /* ── Media inside card ── */
 .gallery-media {
@@ -545,15 +536,11 @@ body {
   );
   background-size: 800px 100%;
   animation: shimmer 1.6s infinite linear;
+  aspect-ratio: 3 / 4;
 }
-.gallery-shimmer-card.gallery-card--vertical {
-  grid-column: span 1;
-  aspect-ratio: 9 / 16;
-}
-.gallery-shimmer-card.gallery-card--horizontal {
-  grid-column: span 1;
-  aspect-ratio: 16 / 9;
-}
+/* orientation classes don't change the shimmer shape */
+.gallery-shimmer-card.gallery-card--vertical  { aspect-ratio: 3 / 4; }
+.gallery-shimmer-card.gallery-card--horizontal { aspect-ratio: 3 / 4; }
 
 /* ════════════════════════════════
    LIGHTBOX
