@@ -139,7 +139,9 @@ body {
 ::-webkit-scrollbar-track { background: var(--bg-page); }
 ::-webkit-scrollbar-thumb { background: var(--scrollbar-thumb); border-radius: 2px; }
 
-/* ── Custom Cursor ── */
+/* ── Custom Cursor ──
+   Use transform:translate for position instead of left/top to keep
+   cursor movement on the compositor thread (no layout recalculation). */
 .cursor-dot {
   position: fixed;
   width: 6px; height: 6px;
@@ -147,8 +149,8 @@ body {
   border-radius: 50%;
   pointer-events: none;
   z-index: 99999;
-  transform: translate(-50%, -50%);
-  will-change: left, top, transform, opacity;
+  top: 0; left: 0;
+  will-change: transform, opacity;
   transition: opacity 0.18s ease, transform 0.15s ease;
 }
 .cursor-ring {
@@ -158,8 +160,8 @@ body {
   border-radius: 50%;
   pointer-events: none;
   z-index: 99998;
-  transform: translate(-50%, -50%);
-  will-change: left, top, width, height, transform;
+  top: 0; left: 0;
+  will-change: transform;
   transition: width 0.28s cubic-bezier(0.22,1,0.36,1),
               height 0.28s cubic-bezier(0.22,1,0.36,1),
               border-color 0.28s ease,
@@ -167,8 +169,8 @@ body {
               transform 0.15s ease;
 }
 .cursor-dot.expanded {
+  /* opacity set to 0 by JS flush(); no transform override needed */
   opacity: 0;
-  transform: translate(-50%, -50%) scale(0);
 }
 .cursor-ring.expanded {
   width: 60px; height: 60px;
@@ -259,8 +261,31 @@ body {
 /* ── Video card ── */
 .video-card video { object-fit: cover; width: 100%; height: 100%; }
 
-/* ── Theme transition ── */
-.theme-root * {
+/* ── Theme transition — scoped to elements that actually change colour.
+   Avoid matching every element (*) which forces the browser to track
+   transitions on media, SVG internals, and video elements needlessly. ── */
+.theme-root body,
+.theme-root header,
+.theme-root nav,
+.theme-root main,
+.theme-root section,
+.theme-root footer,
+.theme-root div,
+.theme-root article,
+.theme-root aside,
+.theme-root button,
+.theme-root a,
+.theme-root span,
+.theme-root p,
+.theme-root h1, .theme-root h2, .theme-root h3,
+.theme-root h4, .theme-root h5, .theme-root h6,
+.theme-root li,
+.theme-root svg,
+.theme-root path,
+.theme-root rect,
+.theme-root circle,
+.theme-root line,
+.theme-root polyline {
   transition-property: background-color, border-color, color;
   transition-duration: 0.4s;
   transition-timing-function: ease;
@@ -428,12 +453,14 @@ body {
   object-fit: cover;
   opacity: 0;
   transition: opacity 0.5s ease, transform 0.6s ease;
-  will-change: transform;
+  /* No will-change on base — only promote the hovered card to a GPU layer */
 }
 .gallery-media--visible {
   opacity: 1;
 }
+/* Promote to GPU layer only on hover so we don’t create 70+ compositor layers */
 .gallery-card:hover .gallery-media {
+  will-change: transform;
   transform: scale(1.04);
 }
 

@@ -3,15 +3,10 @@ import { useEffect, useRef } from 'react';
 /**
  * CustomCursor — ref-only implementation.
  *
- * Why no useState:
- *   State updates cause re-renders and stale closures inside event handlers.
- *   All DOM mutations happen directly through refs so there are zero re-renders
- *   on mouse move, zero listener accumulation, and no stale-closure bugs.
- *
- * Hover detection via event delegation:
- *   Instead of attaching mouseenter/mouseleave to every interactive element
- *   (which leaks when the DOM changes), we check e.target.closest() on every
- *   mousemove. Fast, accurate, and self-cleaning.
+ * Performance fix: cursor position is set via transform:translate instead of
+ * left/top. This keeps all cursor movement on the GPU compositor thread —
+ * no layout recalculation happens at 60fps, eliminating a major source of
+ * main-thread jitter.
  */
 export default function CustomCursor() {
   const dotRef  = useRef(null);
@@ -37,14 +32,9 @@ export default function CustomCursor() {
       dot.classList.toggle('expanded', expand);
       ring.classList.toggle('expanded', expand);
 
-      // Subtle press feedback
-      if (st.pressing) {
-        dot.style.transform  = 'translate(-50%, -50%) scale(0.5)';
-        ring.style.transform = 'translate(-50%, -50%) scale(0.82)';
-      } else {
-        dot.style.transform  = '';
-        ring.style.transform = '';
-      }
+      // Subtle press feedback — bake position into transform so scale works
+      const scale = st.pressing ? ' scale(0.5)' : '';
+      dot.style.transform = `translate(calc(${st.x}px - 50%), calc(${st.y}px - 50%))${scale}`;
     };
 
     // ── Event handlers ────────────────────────────────────────────────────
@@ -52,9 +42,8 @@ export default function CustomCursor() {
       st.x = e.clientX;
       st.y = e.clientY;
 
-      // Dot tracks instantly — no lag
-      dot.style.left = `${e.clientX}px`;
-      dot.style.top  = `${e.clientY}px`;
+      // Dot tracks instantly via transform — compositor-only, zero layout cost
+      dot.style.transform = `translate(calc(${e.clientX}px - 50%), calc(${e.clientY}px - 50%))`;
 
       // Hover via delegation — no extra listeners
       const nowHovering = !!e.target.closest(HOVER_SEL);
@@ -74,8 +63,9 @@ export default function CustomCursor() {
     const animate = () => {
       st.rx = lerp(st.rx, st.x, 0.14);
       st.ry = lerp(st.ry, st.y, 0.14);
-      ring.style.left = `${st.rx}px`;
-      ring.style.top  = `${st.ry}px`;
+      // transform:translate — compositor thread, zero layout cost
+      const ringScale = st.pressing ? ' scale(0.82)' : '';
+      ring.style.transform = `translate(calc(${st.rx}px - 50%), calc(${st.ry}px - 50%))${ringScale}`;
       raf = requestAnimationFrame(animate);
     };
     raf = requestAnimationFrame(animate);
