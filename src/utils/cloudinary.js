@@ -31,20 +31,18 @@ export function buildUrl(publicId, resourceType = 'image', opts = {}) {
 
 /**
  * Load all media from the local manifest.
- * Returns a flat array sorted vertical-first, then horizontal.
+ * Returns a flat array sorted by public_id (zero-padded lexicographic),
+ * so numeric prefixes like 01, 02 … 10 are ordered correctly.
  */
 export async function fetchAllMedia() {
   // Dynamic import so Vite can tree-shake and code-split the JSON.
   const manifest = (await import('../data/media-manifest.json')).default;
 
-  // Sort: vertical first, then horizontal
-  return [...manifest].sort((a, b) => {
-    const aV = a.height > a.width;
-    const bV = b.height > b.width;
-    if (aV && !bV) return -1;
-    if (!aV && bV) return 1;
-    return 0;
-  });
+  // Sort by public_id with zero-padded number segments for correct ordering.
+  function padNumbers(str) {
+    return str.replace(/(\d+)/g, (n) => n.padStart(10, '0'));
+  }
+  return [...manifest].sort((a, b) => padNumbers(a.id).localeCompare(padNumbers(b.id)));
 }
 
 /**

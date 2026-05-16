@@ -188,6 +188,7 @@ export default function About() {
               </div>
             </motion.div>
 
+            {/* VIEW SHOWREEL BUTTON — commented out until video is ready
             <motion.div
               initial={{ opacity: 0 }} whileInView={{ opacity: 1 }}
               viewport={{ once: true }} transition={{ duration: 0.8, delay: 0.4 }}
@@ -202,6 +203,7 @@ export default function About() {
                 </svg>
               </a>
             </motion.div>
+            */}
           </div>
         </div>
       </div>

@@ -47,7 +47,6 @@ function MediaCard({ item, index, onOpen }) {
         <video
           ref={videoRef}
           src={item.url}
-          muted
           playsInline
           loop
           preload="metadata"
@@ -137,7 +136,7 @@ function Lightbox({ item, onClose }) {
           <video
             src={item.url}
             controls
-            muted
+            controlsList="nodownload"
             playsInline
             preload="metadata"
             autoPlay
@@ -223,16 +222,9 @@ export default function Gallery() {
   // Filter list
   const filters = ['All', ...GALLERY_FOLDERS];
 
-  // Filtered + sorted media
+  // Filtered media — order comes from fetchAllMedia (public_id sort)
   const displayed = media
-    .filter((item) => activeFilter === 'All' || item.folder === activeFilter)
-    .sort((a, b) => {
-      const aV = a.height > a.width;
-      const bV = b.height > b.width;
-      if (aV && !bV) return -1;
-      if (!aV && bV) return 1;
-      return 0;
-    });
+    .filter((item) => activeFilter === 'All' || item.folder === activeFilter);
 
   return (
     <section id="work" className="gallery-section section-padding">

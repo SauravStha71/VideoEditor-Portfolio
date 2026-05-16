@@ -88,14 +88,12 @@ async function main() {
 
   const all = results.flatMap((r) => (r.status === 'fulfilled' ? r.value : []));
 
-  // Sort: vertical first, then horizontal
-  all.sort((a, b) => {
-    const aV = a.height > a.width;
-    const bV = b.height > b.width;
-    if (aV && !bV) return -1;
-    if (!aV && bV) return 1;
-    return 0;
-  });
+  // Sort by public_id in ascending lexicographic order with zero-padded numbers.
+  // e.g. "01_foo" < "02_foo" < "10_foo" regardless of Cloudinary return order.
+  function padNumbers(str) {
+    return str.replace(/(\d+)/g, (n) => n.padStart(10, '0'));
+  }
+  all.sort((a, b) => padNumbers(a.id).localeCompare(padNumbers(b.id)));
 
   // Write output
   const outDir  = join(__dirname, '..', 'src', 'data');

@@ -416,20 +416,16 @@ body {
   /* no margin-bottom — gap handles spacing */
 }
 
-/* Vertical card — portrait (9:16), single column */
+/* All cards — uniform single-column span regardless of orientation */
 .gallery-card--vertical {
   grid-column: span 1;
   aspect-ratio: 9 / 16;
 }
 
-/* Horizontal card — landscape (16:9)
-   Spans 2 columns on ≥480 px; falls back to 1 on mobile */
+/* Horizontal cards use their natural aspect-ratio but stay in 1 column */
 .gallery-card--horizontal {
   grid-column: span 1;
   aspect-ratio: 16 / 9;
-}
-@media (min-width: 480px) {
-  .gallery-card--horizontal { grid-column: span 2; }
 }
 
 /* ── Media inside card ── */
@@ -488,7 +484,7 @@ body {
 }
 .gallery-card__folder {
   font-family: 'DM Mono', monospace;
-  font-size: 0.7rem;
+  font-size: 0.85rem;
   letter-spacing: 0.1em;
   text-transform: uppercase;
   color: rgba(245, 245, 240, 0.9);
@@ -557,9 +553,6 @@ body {
 .gallery-shimmer-card.gallery-card--horizontal {
   grid-column: span 1;
   aspect-ratio: 16 / 9;
-}
-@media (min-width: 480px) {
-  .gallery-shimmer-card.gallery-card--horizontal { grid-column: span 2; }
 }
 
 /* ════════════════════════════════
