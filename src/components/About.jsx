@@ -9,7 +9,7 @@ const skills = [
 ];
 
 const stats = [
-  { value: 4,    suffix: '+',  label: 'Years Experience' },
+  { value: 5,    suffix: '+',  label: 'Years Experience' },
   { value: 500,  suffix: '+',  label: 'Videos Edited' },
   { value: 5,    suffix: 'M+', label: 'Short Form Views' },
   { value: 200,  suffix: 'K+', label: 'Long Form Views' },
