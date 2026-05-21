@@ -1,102 +1,96 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 
+/**
+ * CustomCursor — ref-only implementation.
+ *
+ * Performance fix: cursor position is set via transform:translate instead of
+ * left/top. This keeps all cursor movement on the GPU compositor thread —
+ * no layout recalculation happens at 60fps, eliminating a major source of
+ * main-thread jitter.
+ */
 export default function CustomCursor() {
-  const dotRef = useRef(null);
+  const dotRef  = useRef(null);
   const ringRef = useRef(null);
-  const pos = useRef({ x: 0, y: 0 });
-  const ringPos = useRef({ x: 0, y: 0 });
-  const rafRef = useRef(null);
-  const [isHovering, setIsHovering] = useState(false);
-  const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
-    const handleMouseMove = (e) => {
-      pos.current = { x: e.clientX, y: e.clientY };
-      if (!isVisible) setIsVisible(true);
+    const dot  = dotRef.current;
+    const ring = ringRef.current;
+    if (!dot || !ring) return;
 
-      // Move dot instantly
-      if (dotRef.current) {
-        dotRef.current.style.left = `${e.clientX}px`;
-        dotRef.current.style.top = `${e.clientY}px`;
-      }
-    };
+    // ── State (plain object, no React state) ──────────────────────────────
+    const st = { x: -200, y: -200, rx: -200, ry: -200, visible: false, hovering: false, pressing: false };
 
-    const handleMouseEnter = () => setIsVisible(true);
-    const handleMouseLeave = () => setIsVisible(false);
-
-    // Track hover on interactive elements
-    const handleElementHoverIn = () => setIsHovering(true);
-    const handleElementHoverOut = () => setIsHovering(false);
-
-    const interactives = document.querySelectorAll(
-      'a, button, [data-cursor="expand"], .project-card, input, textarea'
-    );
-
-    interactives.forEach((el) => {
-      el.addEventListener('mouseenter', handleElementHoverIn);
-      el.addEventListener('mouseleave', handleElementHoverOut);
-    });
-
-    document.addEventListener('mousemove', handleMouseMove);
-    document.addEventListener('mouseenter', handleMouseEnter);
-    document.addEventListener('mouseleave', handleMouseLeave);
-
-    // Ring lerp animation
+    const HOVER_SEL = 'a, button, [data-cursor="expand"], input, textarea, label, select';
     const lerp = (a, b, t) => a + (b - a) * t;
-    const animateRing = () => {
-      ringPos.current.x = lerp(ringPos.current.x, pos.current.x, 0.1);
-      ringPos.current.y = lerp(ringPos.current.y, pos.current.y, 0.1);
 
-      if (ringRef.current) {
-        ringRef.current.style.left = `${ringPos.current.x}px`;
-        ringRef.current.style.top = `${ringPos.current.y}px`;
-      }
-      rafRef.current = requestAnimationFrame(animateRing);
+    // ── Apply current state to DOM ────────────────────────────────────────
+    const flush = () => {
+      dot.style.opacity  = st.visible ? '1' : '0';
+      ring.style.opacity = st.visible ? '1' : '0';
+
+      const expand = st.hovering || st.pressing;
+      dot.classList.toggle('expanded', expand);
+      ring.classList.toggle('expanded', expand);
+
+      // Subtle press feedback — bake position into transform so scale works
+      const scale = st.pressing ? ' scale(0.5)' : '';
+      dot.style.transform = `translate(calc(${st.x}px - 50%), calc(${st.y}px - 50%))${scale}`;
     };
-    rafRef.current = requestAnimationFrame(animateRing);
+
+    // ── Event handlers ────────────────────────────────────────────────────
+    const onMove = (e) => {
+      st.x = e.clientX;
+      st.y = e.clientY;
+
+      // Dot tracks instantly via transform — compositor-only, zero layout cost
+      dot.style.transform = `translate(calc(${e.clientX}px - 50%), calc(${e.clientY}px - 50%))`;
+
+      // Hover via delegation — no extra listeners
+      const nowHovering = !!e.target.closest(HOVER_SEL);
+      const changed = nowHovering !== st.hovering || !st.visible;
+      st.hovering = nowHovering;
+      st.visible  = true;
+      if (changed) flush();
+    };
+
+    const onEnter  = () => { st.visible  = true;  flush(); };
+    const onLeave  = () => { st.visible  = false; flush(); };
+    const onDown   = () => { st.pressing = true;  flush(); };
+    const onUp     = () => { st.pressing = false; flush(); };
+
+    // ── Ring lerp animation loop ──────────────────────────────────────────
+    let raf;
+    const animate = () => {
+      st.rx = lerp(st.rx, st.x, 0.14);
+      st.ry = lerp(st.ry, st.y, 0.14);
+      // transform:translate — compositor thread, zero layout cost
+      const ringScale = st.pressing ? ' scale(0.82)' : '';
+      ring.style.transform = `translate(calc(${st.rx}px - 50%), calc(${st.ry}px - 50%))${ringScale}`;
+      raf = requestAnimationFrame(animate);
+    };
+    raf = requestAnimationFrame(animate);
+
+    // ── Register ─────────────────────────────────────────────────────────
+    document.addEventListener('mousemove',  onMove,  { passive: true });
+    document.addEventListener('mouseenter', onEnter);
+    document.addEventListener('mouseleave', onLeave);
+    document.addEventListener('mousedown',  onDown);
+    document.addEventListener('mouseup',    onUp);
 
     return () => {
-      document.removeEventListener('mousemove', handleMouseMove);
-      document.removeEventListener('mouseenter', handleMouseEnter);
-      document.removeEventListener('mouseleave', handleMouseLeave);
-      interactives.forEach((el) => {
-        el.removeEventListener('mouseenter', handleElementHoverIn);
-        el.removeEventListener('mouseleave', handleElementHoverOut);
-      });
-      if (rafRef.current) cancelAnimationFrame(rafRef.current);
+      document.removeEventListener('mousemove',  onMove);
+      document.removeEventListener('mouseenter', onEnter);
+      document.removeEventListener('mouseleave', onLeave);
+      document.removeEventListener('mousedown',  onDown);
+      document.removeEventListener('mouseup',    onUp);
+      cancelAnimationFrame(raf);
     };
-  }, []);
-
-  // Re-bind hover listeners when DOM changes
-  useEffect(() => {
-    const rebind = () => {
-      const handleIn = () => setIsHovering(true);
-      const handleOut = () => setIsHovering(false);
-      const els = document.querySelectorAll(
-        'a, button, [data-cursor="expand"], .project-card, input, textarea'
-      );
-      els.forEach((el) => {
-        el.addEventListener('mouseenter', handleIn);
-        el.addEventListener('mouseleave', handleOut);
-      });
-    };
-    const observer = new MutationObserver(rebind);
-    observer.observe(document.body, { childList: true, subtree: true });
-    return () => observer.disconnect();
   }, []);
 
   return (
     <>
-      <div
-        ref={dotRef}
-        className={`cursor-dot ${isHovering ? 'expanded' : ''}`}
-        style={{ opacity: isVisible ? 1 : 0 }}
-      />
-      <div
-        ref={ringRef}
-        className={`cursor-ring ${isHovering ? 'expanded' : ''}`}
-        style={{ opacity: isVisible ? 1 : 0 }}
-      />
+      <div ref={dotRef}  className="cursor-dot"  style={{ opacity: 0 }} />
+      <div ref={ringRef} className="cursor-ring" style={{ opacity: 0 }} />
     </>
   );
 }

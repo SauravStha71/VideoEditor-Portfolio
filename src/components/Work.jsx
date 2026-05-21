@@ -5,7 +5,6 @@ import { projects } from '../data/projects';
 export default function Work() {
   return (
     <section id="work" className="py-28 md:py-40 section-padding">
-      {/* Section Header */}
       <motion.div
         initial={{ opacity: 0, y: 30 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -17,14 +16,18 @@ export default function Work() {
           <p className="font-mono text-xs tracking-ultra uppercase text-accent mb-4">
             — Selected Work
           </p>
-          <h2 className="font-serif font-light italic leading-none"
-            style={{ fontSize: 'clamp(3rem, 8vw, 8rem)' }}
+          <h2
+            className="font-serif font-light italic leading-none"
+            style={{ fontSize: 'clamp(3rem, 8vw, 8rem)', color: 'var(--text-primary)' }}
           >
-            <span className="text-warm-white">Projects</span>
+            Projects
           </h2>
         </div>
 
-        <p className="font-mono text-xs text-muted tracking-wider max-w-xs leading-relaxed">
+        <p
+          className="font-mono text-xs tracking-wider max-w-xs leading-relaxed"
+          style={{ color: 'var(--text-muted)' }}
+        >
           A curated selection of films, commercials, and creative projects — each crafted with intention and precision.
         </p>
       </motion.div>
@@ -36,7 +39,6 @@ export default function Work() {
         ))}
       </div>
 
-      {/* View all link */}
       <motion.div
         initial={{ opacity: 0 }}
         whileInView={{ opacity: 1 }}

@@ -1,155 +1,186 @@
-import { motion } from 'framer-motion';
+import { motion, useInView } from 'framer-motion';
+import { useRef, useEffect, useState } from 'react';
+import dipenPhoto from '../assets/Dipen.jpg';
 
 const skills = [
-  'Video Editing',
-  'Color Grading',
-  'Motion Graphics',
-  'Adobe Premiere Pro',
-  'After Effects',
-  'DaVinci Resolve',
-  'Sound Design',
-  'Visual FX',
+  'Video Editing', 'Color Grading', 'Motion Graphics',
+  'Adobe Premiere Pro', 'After Effects', 'DaVinci Resolve',
+  'Sound Design', 'Visual FX',
 ];
 
 const stats = [
-  { value: '8+', label: 'Years Experience' },
-  { value: '120+', label: 'Projects Delivered' },
-  { value: '40+', label: 'Global Clients' },
+  { value: 5,    suffix: '+',  label: 'Years Experience' },
+  { value: 500,  suffix: '+',  label: 'Videos Edited' },
+  { value: 5,    suffix: 'M+', label: 'Short Form Views' },
+  { value: 200,  suffix: 'K+', label: 'Long Form Views' },
 ];
 
 const containerVariants = {
   hidden: {},
-  visible: {
-    transition: { staggerChildren: 0.08 },
-  },
+  visible: { transition: { staggerChildren: 0.08 } },
 };
-
 const itemVariants = {
   hidden: { opacity: 0, y: 20 },
   visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] } },
 };
 
+// ── Animated counter hook ──
+function useCounter(target, duration = 1800, startCounting) {
+  const [count, setCount] = useState(0);
+
+  useEffect(() => {
+    if (!startCounting) {
+      setCount(0);
+      return;
+    }
+    let startTime = null;
+    let raf;
+    const step = (timestamp) => {
+      if (!startTime) startTime = timestamp;
+      const progress = Math.min((timestamp - startTime) / duration, 1);
+      const eased = 1 - Math.pow(1 - progress, 3);
+      setCount(Math.floor(eased * target));
+      if (progress < 1) raf = requestAnimationFrame(step);
+      else setCount(target);
+    };
+    raf = requestAnimationFrame(step);
+    return () => cancelAnimationFrame(raf);
+  }, [startCounting, target, duration]);
+
+  return count;
+}
+
+// ── Single stat card ──
+function StatCard({ stat, index, shouldStart }) {
+  const count = useCounter(stat.value, 1600 + index * 200, shouldStart);
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.6, delay: index * 0.1 + 0.3 }}
+      className="p-4 border"
+      style={{ background: 'var(--stat-bg)', borderColor: 'var(--stat-border)' }}
+    >
+      <p className="font-serif text-3xl font-light" style={{ color: 'var(--text-primary)' }}>
+        {count}{stat.suffix}
+      </p>
+      <p className="font-mono text-xs tracking-wider uppercase mt-1" style={{ color: 'var(--text-muted)' }}>
+        {stat.label}
+      </p>
+    </motion.div>
+  );
+}
+
 export default function About() {
+  const statsRef = useRef(null);
+  const isInView = useInView(statsRef, { once: false, margin: '-80px' });
+
   return (
     <section id="about" className="py-28 md:py-40 relative overflow-hidden">
-      {/* Subtle top border */}
-      <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-warm-white/10 to-transparent" />
+      <div
+        className="absolute top-0 left-0 right-0 h-px"
+        style={{ background: 'linear-gradient(to right, transparent, var(--top-line), transparent)' }}
+      />
 
       <div className="section-padding">
-        {/* Section label */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.7 }}
+          initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }} transition={{ duration: 0.7 }}
           className="flex items-center gap-4 mb-16 md:mb-24"
         >
           <span className="divider" />
           <span className="font-mono text-xs tracking-ultra uppercase text-accent">About</span>
         </motion.div>
 
-        {/* Split layout */}
         <div className="grid lg:grid-cols-2 gap-16 lg:gap-24 items-start">
+
           {/* Left — Image + stats */}
           <motion.div
-            initial={{ opacity: 0, x: -40 }}
-            whileInView={{ opacity: 1, x: 0 }}
+            initial={{ opacity: 0, x: -40 }} whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true, margin: '-80px' }}
             transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
             className="relative"
           >
-            {/* Main portrait image */}
-            <div className="relative aspect-[3/4] overflow-hidden bg-surface">
+            <div className="relative aspect-[3/4] overflow-hidden" style={{ background: 'var(--bg-surface)' }}>
               <img
-                src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=800&q=80"
+                src={dipenPhoto}
                 alt="Dipen Maharjan — Video Editor"
                 loading="lazy"
                 className="w-full h-full object-cover grayscale contrast-110"
               />
-              {/* Overlay */}
-              <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
-              {/* Name label at bottom */}
+              <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />
               <div className="absolute bottom-6 left-6">
-                <p className="font-serif text-2xl italic text-warm-white">Dipen Maharjan</p>
-                <p className="font-mono text-xs text-muted tracking-widest uppercase mt-1">
-                  Video Editor
-                </p>
+                <p className="font-serif text-2xl italic text-white">Dipen Maharjan</p>
+                <p className="font-mono text-xs tracking-widest uppercase mt-1 text-white/60">Video Editor</p>
               </div>
             </div>
-
-            {/* Accent border decoration */}
             <div className="absolute -top-3 -right-3 w-24 h-24 border border-accent/20 pointer-events-none" />
 
-            {/* Stats row */}
-            <div className="grid grid-cols-3 gap-4 mt-6">
+            {/* Animated stats */}
+            <div ref={statsRef} className="grid grid-cols-2 gap-4 mt-6">
               {stats.map((stat, i) => (
-                <motion.div
-                  key={stat.label}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.6, delay: i * 0.1 + 0.3 }}
-                  className="bg-surface border border-warm-white/5 p-4"
-                >
-                  <p className="font-serif text-3xl font-light text-warm-white">{stat.value}</p>
-                  <p className="font-mono text-xs text-muted tracking-wider uppercase mt-1">
-                    {stat.label}
-                  </p>
-                </motion.div>
+                <StatCard key={stat.label} stat={stat} index={i} shouldStart={isInView} />
               ))}
             </div>
           </motion.div>
 
-          {/* Right — Bio + skills */}
+          {/* Right — bio + skills */}
           <div className="flex flex-col justify-center">
-            {/* Heading */}
             <motion.h2
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+              initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }} transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
               className="font-serif font-light italic leading-tight mb-8"
               style={{ fontSize: 'clamp(2.5rem, 5vw, 5rem)' }}
             >
-              <span className="text-warm-white">Crafting stories </span>
+              <span style={{ color: 'var(--text-primary)' }}>Crafting stories </span>
               <span className="text-outline">frame by frame.</span>
             </motion.h2>
 
-            {/* Bio */}
             <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8, delay: 0.15 }}
+              initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }} transition={{ duration: 0.8, delay: 0.15 }}
               className="space-y-5 mb-12"
             >
-              <p className="text-muted-light leading-relaxed text-base font-light">
-                I'm a Ontario based video editor with over 8 years of experience crafting
-                cinematic narratives. From documentary to high-fashion campaigns, I believe
-                every frame has a story to tell.
+              <p className="leading-relaxed text-base font-light" style={{ color: 'var(--text-muted-light)' }}>
+                Toronto-based Video Editor & Motion Designer with experience across agency, freelance, and in-house environments.
               </p>
-              <p className="text-muted leading-relaxed text-base font-light">
-                My work spans short films, music videos, commercial campaigns, and branded
-                content — always with an eye for rhythm, light, and emotional resonance.
+              <p className="leading-relaxed text-base font-light" style={{ color: 'var(--text-muted-light)' }}>
+                Specializing in short form and long form content, my work has accumulated 5M+ views in short form and 200K+ views in long form — crafting visuals for big brands and corporate clients alike.
+
+              </p>
+              <p className="leading-relaxed text-base font-light" style={{ color: 'var(--text-muted)' }}>
+                From scroll-stopping reels to cinematic long form stories, I bring both creative instinct and technical precision to every frame.
               </p>
             </motion.div>
 
-            {/* Skills */}
             <motion.div
-              variants={containerVariants}
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, margin: '-80px' }}
+              variants={containerVariants} initial="hidden"
+              whileInView="visible" viewport={{ once: true, margin: '-80px' }}
             >
-              <p className="font-mono text-xs tracking-widest uppercase text-muted mb-6">
+              <p
+                className="font-mono text-xs tracking-widest uppercase mb-6"
+                style={{ color: 'var(--text-muted)' }}
+              >
                 — Expertise
               </p>
               <div className="flex flex-wrap gap-3">
                 {skills.map((skill) => (
                   <motion.span
-                    key={skill}
-                    variants={itemVariants}
-                    className="font-mono text-xs tracking-wider text-muted-light border border-warm-white/10 px-4 py-2 hover:border-accent/40 hover:text-warm-white transition-all duration-300"
+                    key={skill} variants={itemVariants}
+                    className="font-mono text-xs tracking-wider px-4 py-2 border transition-all duration-300"
+                    style={{ borderColor: 'var(--skill-border)', color: 'var(--skill-text)' }}
+                    onMouseEnter={e => {
+                      e.currentTarget.style.borderColor = 'var(--skill-hover-border)';
+                      e.currentTarget.style.color = 'var(--skill-hover-text)';
+                      e.currentTarget.style.background = 'var(--skill-hover-bg, transparent)';
+                    }}
+                    onMouseLeave={e => {
+                      e.currentTarget.style.borderColor = 'var(--skill-border)';
+                      e.currentTarget.style.color = 'var(--skill-text)';
+                      e.currentTarget.style.background = 'transparent';
+                    }}
                   >
                     {skill}
                   </motion.span>
@@ -157,26 +188,22 @@ export default function About() {
               </div>
             </motion.div>
 
-            {/* Download reel */}
+            {/* VIEW SHOWREEL BUTTON — commented out until video is ready
             <motion.div
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8, delay: 0.4 }}
+              initial={{ opacity: 0 }} whileInView={{ opacity: 1 }}
+              viewport={{ once: true }} transition={{ duration: 0.8, delay: 0.4 }}
               className="mt-12"
             >
-              <a
-                href="#contact"
-                className="btn-outline"
-                data-cursor="expand"
-              >
+              <a href="#contact" className="btn-outline" data-cursor="expand">
                 <span>View Showreel</span>
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1}
+                    d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
               </a>
             </motion.div>
+            */}
           </div>
         </div>
       </div>
