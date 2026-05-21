@@ -3,8 +3,14 @@ import { createContext, useContext, useState, useEffect } from 'react';
 const ThemeContext = createContext();
 
 export function ThemeProvider({ children }) {
-  // Default: dark (preserves original look)
-  const [isDark, setIsDark] = useState(true);
+  // L-4 fix: initialise from localStorage, fallback to OS preference, then dark.
+  const [isDark, setIsDark] = useState(() => {
+    try {
+      const saved = localStorage.getItem('theme');
+      if (saved !== null) return saved === 'dark';
+    } catch (_) { /* localStorage may be blocked in some browsers */ }
+    return window.matchMedia?.('(prefers-color-scheme: dark)').matches ?? true;
+  });
 
   useEffect(() => {
     const root = document.documentElement;
@@ -15,6 +21,8 @@ export function ThemeProvider({ children }) {
       root.classList.add('theme-light');
       root.classList.remove('theme-dark');
     }
+    // Persist the preference so it survives page reloads
+    try { localStorage.setItem('theme', isDark ? 'dark' : 'light'); } catch (_) {}
   }, [isDark]);
 
   return (

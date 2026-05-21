@@ -1,0 +1,10 @@
+User-agent: *
+Allow: /
+
+# Prevent crawlers from indexing build artifacts or source directories
+Disallow: /src/
+Disallow: /scripts/
+Disallow: /node_modules/
+
+# Replace with your actual production domain
+Sitemap: https://dipenmaharjan.com/sitemap.xml

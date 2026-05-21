@@ -4,6 +4,11 @@
  * Fetches all media from your Cloudinary folders and writes
  * src/data/media-manifest.json for the Gallery component.
  *
+ * Required env vars (set in .env.local or your shell):
+ *   CLOUDINARY_CLOUD_NAME
+ *   CLOUDINARY_API_KEY
+ *   CLOUDINARY_API_SECRET
+ *
  * Run:  npm run manifest
  * ─────────────────────────────────────────────────────────
  */
@@ -13,6 +18,23 @@ import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
+
+// ── Credentials — read from environment, never hardcode ──
+const CLOUD_NAME = process.env.CLOUDINARY_CLOUD_NAME;
+const API_KEY    = process.env.CLOUDINARY_API_KEY;
+const API_SECRET = process.env.CLOUDINARY_API_SECRET;
+
+if (!CLOUD_NAME || !API_KEY || !API_SECRET) {
+  console.error(
+    '\n❌  Missing required environment variables.\n' +
+    '    Please set the following before running this script:\n' +
+    '      CLOUDINARY_CLOUD_NAME\n' +
+    '      CLOUDINARY_API_KEY\n' +
+    '      CLOUDINARY_API_SECRET\n' +
+    '    Tip: add them to a .env.local file in the project root.\n'
+  );
+  process.exit(1);
+}
 
 const FOLDERS = [
   'Definity',

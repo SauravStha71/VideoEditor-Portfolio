@@ -5,7 +5,10 @@
 //  CORS issues with the Admin API and to keep
 //  the API secret off the client bundle.
 // ─────────────────────────────────────────────
-export const CLOUD_NAME = 'du6i9l4id';
+// Read from env so the value can be rotated without a code change.
+// Add VITE_CLOUDINARY_CLOUD_NAME=du6i9l4id to your .env.local file.
+export const CLOUD_NAME =
+  import.meta.env.VITE_CLOUDINARY_CLOUD_NAME ?? 'du6i9l4id';
 
 // Folders to display in the gallery (order determines filter pill order)
 export const GALLERY_FOLDERS = [

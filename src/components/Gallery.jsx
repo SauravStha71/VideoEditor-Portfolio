@@ -210,8 +210,9 @@ export default function Gallery() {
       })
       .catch((err) => {
         if (!cancelled) {
+          // Log the full error internally but show only a safe generic message
           console.error('Gallery fetch error:', err);
-          setError(err.message ?? 'Failed to load media.');
+          setError('Unable to load media. Please try again later.');
           setLoading(false);
         }
       });
