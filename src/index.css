@@ -135,36 +135,6 @@ body {
 
 *, *:hover { cursor: none !important; }
 
-/* ── Touch / coarse-pointer devices (mobile & tablet) ──────────────────────
-   Restore all native cursor / touch behaviour.
-   The custom cursor is not rendered on these devices (see CustomCursor.jsx),
-   so cursor:none would leave users with no visible pointer at all.
-   Scoped to `pointer: coarse` — unaffected on desktop/laptop.
-   ─────────────────────────────────────────────────────────────────────── */
-@media (pointer: coarse) {
-  body {
-    cursor: auto;
-  }
-  /* Override the global cursor:none !important rule above */
-  *, *:hover {
-    cursor: auto !important;
-  }
-  /* Restore pointer for tappable elements */
-  a, button,
-  [role="button"],
-  .gallery-filter-pill,
-  .gallery-card,
-  .lightbox-close {
-    cursor: pointer !important;
-  }
-  /* Suppress iOS/Android long-press save sheet on video elements */
-  video {
-    -webkit-touch-callout: none;
-    user-select: none;
-    -webkit-user-select: none;
-  }
-}
-
 ::-webkit-scrollbar { width: 4px; }
 ::-webkit-scrollbar-track { background: var(--bg-page); }
 ::-webkit-scrollbar-thumb { background: var(--scrollbar-thumb); border-radius: 2px; }

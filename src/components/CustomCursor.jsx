@@ -1,5 +1,4 @@
 import { useEffect, useRef } from 'react';
-import { isTouchDevice } from '../utils/device';
 
 /**
  * CustomCursor — ref-only implementation.
@@ -8,24 +7,12 @@ import { isTouchDevice } from '../utils/device';
  * left/top. This keeps all cursor movement on the GPU compositor thread —
  * no layout recalculation happens at 60fps, eliminating a major source of
  * main-thread jitter.
- *
- * Touch fix: On touch/coarse-pointer devices (mobile, tablet) this component
- * renders nothing and attaches zero listeners. Detection uses the CSS
- * `pointer: coarse` media feature — more reliable than screen width because
- * it reflects the actual input type, not display size.
  */
 export default function CustomCursor() {
-  // Evaluate once at render time (synchronous, not a hook).
-  // Safe to call before hooks because its value never changes mid-session.
-  const isTouch = isTouchDevice();
-
   const dotRef  = useRef(null);
   const ringRef = useRef(null);
 
   useEffect(() => {
-    // Touch devices: do nothing. No listeners, no RAF, no cursor shown.
-    if (isTouch) return;
-
     const dot  = dotRef.current;
     const ring = ringRef.current;
     if (!dot || !ring) return;
@@ -98,12 +85,7 @@ export default function CustomCursor() {
       document.removeEventListener('mouseup',    onUp);
       cancelAnimationFrame(raf);
     };
-  }, [isTouch]);
-
-  // Touch devices: render nothing — no cursor elements injected into the DOM.
-  // This also means the CSS `.cursor-dot / .cursor-ring` rules never apply,
-  // so there is zero risk of the custom cursor "lingering" on touch screens.
-  if (isTouch) return null;
+  }, []);
 
   return (
     <>
