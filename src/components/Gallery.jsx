@@ -1,28 +1,51 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { fetchAllMedia, GALLERY_FOLDERS } from '../utils/cloudinary';
+import { isTouchDevice } from '../utils/device';
 
 // ─── Individual media card ────────────────────────────────────────────────────
 function MediaCard({ item, index, onOpen }) {
-  const videoRef = useRef(null);
+  const videoRef   = useRef(null);
   const [hovered, setHovered] = useState(false);
   const [loaded, setLoaded]   = useState(false);
   const isVertical = item.height > item.width;
 
+  // Detect once per card render — value is stable for the session.
+  // On touch devices we skip mouse-driven hover-play entirely.
+  const isTouch = isTouchDevice();
+
+  // ── Hover play — desktop only ─────────────────────────────────────────────
+  // On mobile a tap fires: touchstart → touchend → (simulated) mouseenter →
+  // click. Without the isTouch guard the card video would start playing with
+  // audio, then the lightbox autoPlay would also start → two audio streams.
   const handleEnter = useCallback(() => {
     setHovered(true);
-    if (item.type === 'video' && videoRef.current) {
+    if (!isTouch && item.type === 'video' && videoRef.current) {
       videoRef.current.play().catch(() => {});
     }
-  }, [item.type]);
+  }, [item.type, isTouch]);
 
   const handleLeave = useCallback(() => {
     setHovered(false);
+    if (!isTouch && item.type === 'video' && videoRef.current) {
+      videoRef.current.pause();
+      videoRef.current.currentTime = 0;
+    }
+  }, [item.type, isTouch]);
+
+  // ── Open lightbox — pause card video first ────────────────────────────────
+  // Ensures the card-preview video is silenced before the lightbox video
+  // starts, preventing any overlap even if hover-play fired on mobile.
+  const handleOpen = useCallback(() => {
     if (item.type === 'video' && videoRef.current) {
       videoRef.current.pause();
       videoRef.current.currentTime = 0;
     }
-  }, [item.type]);
+    onOpen(item);
+  }, [item, onOpen]);
+
+  // ── Prevent context-menu on the card (long-press save on Android) ─────────
+  const blockContextMenu = useCallback((e) => e.preventDefault(), []);
 
   return (
     <motion.div
@@ -33,11 +56,12 @@ function MediaCard({ item, index, onOpen }) {
       className={`gallery-card ${isVertical ? 'gallery-card--vertical' : 'gallery-card--horizontal'}`}
       onMouseEnter={handleEnter}
       onMouseLeave={handleLeave}
-      onClick={() => onOpen(item)}
+      onClick={handleOpen}
+      onContextMenu={blockContextMenu}
       data-cursor="expand"
       role="button"
       tabIndex={0}
-      onKeyDown={(e) => e.key === 'Enter' && onOpen(item)}
+      onKeyDown={(e) => e.key === 'Enter' && handleOpen()}
       aria-label={`View ${item.type} from ${item.folder}`}
     >
       {/* Shimmer skeleton while loading */}
@@ -47,10 +71,19 @@ function MediaCard({ item, index, onOpen }) {
         <video
           ref={videoRef}
           src={item.url}
+          // ── Always muted in the card grid ──
+          // Card videos are silent hover-previews only. Audio plays exclusively
+          // from the lightbox. Without `muted`, unmuted autoplay is blocked by
+          // browsers AND the card + lightbox audio would overlap on mobile.
+          muted
           playsInline
           loop
           preload="metadata"
           poster={item.poster}
+          // ── Download / save protection ──
+          controlsList="nodownload"
+          disablePictureInPicture
+          onContextMenu={blockContextMenu}
           onLoadedData={() => setLoaded(true)}
           className={`gallery-media ${loaded ? 'gallery-media--visible' : ''}`}
         />
@@ -136,10 +169,20 @@ function Lightbox({ item, onClose }) {
           <video
             src={item.url}
             controls
-            controlsList="nodownload"
+            // ── Download / save protection ──
+            // controlsList: hides the browser's native download button.
+            // disablePictureInPicture: removes the PiP button (another save
+            //   vector on some browsers/OS combos).
+            // onContextMenu: blocks the right-click / long-press context menu
+            //   that would otherwise offer "Save video as…" on desktop and
+            //   a save-to-camera-roll sheet on iOS/Android.
+            controlsList="nodownload nofullscreen"
+            disablePictureInPicture
+            onContextMenu={(e) => e.preventDefault()}
             playsInline
             preload="metadata"
             autoPlay
+            loop
             className="lightbox-media"
           />
         ) : (
