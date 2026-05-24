@@ -135,6 +135,23 @@ body {
 
 *, *:hover { cursor: none !important; }
 
+/* ── Restore native cursor on touch/mobile devices ──────────────────────────
+   `pointer: coarse` = finger input (phones, tablets).
+   The custom cursor is hidden on these devices, so cursor:none must be undone
+   or users would see no pointer at all. Desktop (pointer: fine) is unaffected.
+   ─────────────────────────────────────────────────────────────────────────── */
+@media (pointer: coarse) {
+  body { cursor: auto; }
+  *, *:hover { cursor: auto !important; }
+  a, button, [role="button"] { cursor: pointer !important; }
+  /* Suppress the iOS/Android long-press "Save video" action sheet */
+  video {
+    -webkit-touch-callout: none;
+    user-select: none;
+    -webkit-user-select: none;
+  }
+}
+
 ::-webkit-scrollbar { width: 4px; }
 ::-webkit-scrollbar-track { background: var(--bg-page); }
 ::-webkit-scrollbar-thumb { background: var(--scrollbar-thumb); border-radius: 2px; }

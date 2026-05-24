@@ -51,6 +51,9 @@ function MediaCard({ item, index, onOpen }) {
           loop
           preload="metadata"
           poster={item.poster}
+          controlsList="nodownload"
+          disablePictureInPicture
+          onContextMenu={(e) => e.preventDefault()}
           onLoadedData={() => setLoaded(true)}
           className={`gallery-media ${loaded ? 'gallery-media--visible' : ''}`}
         />
@@ -137,9 +140,11 @@ function Lightbox({ item, onClose }) {
             src={item.url}
             controls
             controlsList="nodownload"
+            disablePictureInPicture
             playsInline
             preload="metadata"
             autoPlay
+            onContextMenu={(e) => e.preventDefault()}
             className="lightbox-media"
           />
         ) : (
