@@ -40,19 +40,32 @@ function MediaCard({ item, index, onOpen }) {
       onKeyDown={(e) => e.key === 'Enter' && onOpen(item)}
       aria-label={`View ${item.type} from ${item.folder}`}
     >
+      {/* Show poster as background while video loads on iOS */}
+      {!loaded && item.type === 'video' && item.poster && (
+        <img
+          src={item.poster}
+          alt=""
+          aria-hidden="true"
+          className="gallery-media gallery-media--visible"
+          style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }}
+        />
+      )}
       {/* Shimmer skeleton while loading */}
-      {!loaded && <div className="gallery-shimmer" />}
+      {!loaded && item.type !== 'video' && <div className="gallery-shimmer" />}
 
       {item.type === 'video' ? (
         <video
           ref={videoRef}
           src={item.url}
           playsInline
+          muted
           loop
-          preload="metadata"
+          preload="none"
           poster={item.poster}
           onLoadedData={() => setLoaded(true)}
+          onLoadedMetadata={() => setLoaded(true)}
           className={`gallery-media ${loaded ? 'gallery-media--visible' : ''}`}
+          x-webkit-airplay="allow"
         />
       ) : (
         <img
@@ -138,9 +151,10 @@ function Lightbox({ item, onClose }) {
             controls
             controlsList="nodownload"
             playsInline
-            preload="metadata"
+            preload="auto"
             autoPlay
             className="lightbox-media"
+            x-webkit-airplay="allow"
           />
         ) : (
           <img src={item.url} alt={item.folder} className="lightbox-media" />
